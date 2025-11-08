@@ -1,0 +1,80 @@
+/* General page styling */
+body {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Navbar hover effect */
+.navbar .nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+.navbar .nav-link:hover {
+  color: #ffe600 !important; /* German yellow */
+}
+
+/* Drop shadow to cards & sections */
+.card, .alert {
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Footer */
+footer a:hover {
+  color: #ffe600 !important;
+}
+
+/* Smooth fade-in animation */
+main {
+  animation: fadeIn 0.6s ease-in-out;
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+.hero-section {
+  position: relative;
+  color: #fff;
+}
+.hero-section h1 {
+  animation: fadeInDown 0.8s ease-in-out;
+}
+.hero-section p {
+  animation: fadeInUp 1s ease-in-out;
+}
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Soft hover animation for cards */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons hover effect */
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* Table alignment */
+.table th, .table td {
+  vertical-align: middle;
+}

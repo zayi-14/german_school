@@ -1,0 +1,114 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+{% block title %}My Profile · DeutschHaus{% endblock %}
+
+{% block content %}
+
+<!-- ===== Profile Header ===== -->
+<section class="text-center mb-5">
+  <h1 class="fw-bold text-danger">My Profile</h1>
+  <p class="lead text-muted">Manage your account and course enrollments.</p>
+</section>
+
+<!-- ===== Profile Section ===== -->
+<div class="row g-4">
+  
+  <!-- ===== Left Column: Profile Details ===== -->
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-lg h-100 rounded-4">
+      <div class="card-header text-white text-center rounded-top-4"
+           style="background: linear-gradient(90deg, #0b486b, #a30000);">
+        <i class="bi bi-person-circle fs-2"></i>
+        <h5 class="mt-2 mb-0">Account Information</h5>
+      </div>
+      <div class="card-body p-4">
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            <input type="text" name="full_name" class="form-control" id="nameInput"
+                   value="{{ form.instance.full_name }}" placeholder="Full Name" required>
+            <label for="nameInput">Full Name</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="email" name="email" class="form-control" id="emailInput"
+                   value="{{ form.instance.email }}" placeholder="Email" required>
+            <label for="emailInput">Email</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" name="phone" class="form-control" id="phoneInput"
+                   value="{{ form.instance.phone }}" placeholder="Phone Number" required>
+            <label for="phoneInput">Phone</label>
+          </div>
+
+          <button type="submit" class="btn w-100 text-white fw-semibold py-2"
+                  style="background: linear-gradient(90deg, #0b486b, #a30000);">
+            <i class="bi bi-save me-2"></i>Save Changes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Right Column: Enrolled Courses ===== -->
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-lg h-100 rounded-4">
+      <div class="card-header text-white rounded-top-4"
+           style="background: linear-gradient(90deg, #0b486b, #a30000);">
+        <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>My Enrolled Courses</h5>
+      </div>
+      <div class="card-body p-4">
+        {% if registrations %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead>
+                <tr class="text-muted small">
+                  <th>Course</th>
+                  <th>Level</th>
+                  <th>Duration</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for reg in registrations %}
+                <tr>
+                  <td class="fw-semibold">{{ reg.course.title }}</td>
+                  <td>{{ reg.course.level }}</td>
+                  <td>{{ reg.course.duration_weeks }} weeks</td>
+                  <td>
+                    <a href="{% url 'courses:delete_course' reg.course.id %}"
+                       class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                      <i class="bi bi-trash me-1"></i> Remove
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="text-center text-muted py-5">
+            <i class="bi bi-emoji-frown fs-1"></i>
+            <p class="mt-3 mb-0">No courses enrolled yet.</p>
+            <a href="{% url 'courses:courses' %}" class="btn btn-outline-primary mt-3">
+              <i class="bi bi-search me-2"></i>Browse Courses
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Footer CTA Section ===== -->
+<section class="mt-5 text-center py-5 rounded-4 text-white shadow-sm"
+         style="background: linear-gradient(90deg, #0b486b, #a30000);">
+  <h3 class="fw-bold mb-3">Keep Growing with DeutschHaus!</h3>
+  <p class="mb-4">Explore more courses and continue your journey to German fluency 🇩🇪</p>
+  <a href="{% url 'courses:courses' %}" class="btn btn-warning btn-lg px-5">
+    <i class="bi bi-book-half me-2"></i>Explore Courses
+  </a>
+</section>
+
+{% endblock %}

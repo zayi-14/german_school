@@ -1,0 +1,95 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}Learn German Online with DeutschHaus{% endblock %}
+
+{% block content %}
+
+<!-- ===== Hero Section ===== -->
+<section class="hero-section text-white text-center py-5" 
+  style="background: linear-gradient(rgba(11,72,107,0.8), rgba(163,0,0,0.7)), url('{% static 'courses/images/berlin-bg.jpg' %}') center/cover no-repeat;">
+  <div class="container py-5">
+    <h1 class="display-5 fw-bold">Master German — From A1 to B2 with Confidence</h1>
+    <p class="lead my-3">
+      Join hundreds of learners improving their German communication through structured, interactive lessons.
+    </p>
+    <a href="{% url 'courses:register' %}" class="btn btn-warning btn-lg shadow-sm px-4 py-2 mt-3">
+      <i class="bi bi-play-circle me-2"></i>Start Learning Now
+    </a>
+  </div>
+</section>
+
+<!-- ===== Why Choose Us ===== -->
+<section class="py-5 bg-white">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-4">Why Choose <span class="text-danger">DeutschHaus?</span></h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm hover-card">
+          <div class="card-body">
+            <i class="bi bi-people-fill fs-1 text-danger mb-3"></i>
+            <h5 class="card-title">Small Group Classes</h5>
+            <p class="card-text">Engage in personalized sessions with live tutors and interactive activities.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm hover-card">
+          <div class="card-body">
+            <i class="bi bi-globe-europe-africa fs-1 text-primary mb-3"></i>
+            <h5 class="card-title">Native-Level Guidance</h5>
+            <p class="card-text">Our trainers have real-world German experience — helping you sound natural.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm hover-card">
+          <div class="card-body">
+            <i class="bi bi-award fs-1 text-warning mb-3"></i>
+            <h5 class="card-title">Exam Preparation</h5>
+            <p class="card-text">Ace Goethe and TELC exams with focused materials and feedback sessions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Courses Preview ===== -->
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-4">Explore Our German Courses</h2>
+    <div class="row justify-content-center">
+      {% for course in latest_courses %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="fw-bold">{{ course.title }}</h5>
+            <p class="small text-muted">{{ course.get_level_display }} • {{ course.duration_weeks }} weeks</p>
+            <p>{{ course.description|truncatewords:20 }}</p>
+            <a href="{% url 'courses:register' %}" class="btn btn-outline-primary btn-sm">Enroll Now</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p>No courses available yet.</p>
+      {% endfor %}
+    </div>
+    <a href="{% url 'courses:courses' %}" class="btn btn-danger mt-3 px-4">View All Courses</a>
+  </div>
+</section>
+
+<!-- ===== CTA Banner ===== -->
+<section class="py-5 text-center text-white" style="background: linear-gradient(90deg,#0b486b,#a30000);">
+  <div class="container">
+    <h3 class="fw-bold mb-3">Ready to speak like a native?</h3>
+    <p class="mb-4">Register today and start your journey toward fluent, confident German communication.</p>
+    <a href="{% url 'courses:register' %}" class="btn btn-warning btn-lg px-4">
+      <i class="bi bi-pencil-square me-2"></i>Join DeutschHaus
+    </a>
+  </div>
+</section>
+
+{% endblock %}
