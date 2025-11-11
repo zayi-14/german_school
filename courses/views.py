@@ -51,8 +51,31 @@ def home(request):
     return render(request, 'courses/home.html', {'latest_courses': latest_courses})
 
 def courses_list(request):
-    all_courses = Course.objects.all()
-    return render(request, 'courses/courses.html', {'courses': all_courses})
+    selected_level = request.GET.get('level')
+    courses = Course.objects.all()
+
+    if selected_level:
+        courses = courses.filter(level=selected_level)
+
+    filter_applied = bool(selected_level)
+
+    # ✅ Fetch enrolled courses for logged-in student
+    enrolled_course_ids = []
+    if request.user.is_authenticated:
+        student = Student.objects.filter(user=request.user).first()
+        if student:
+            enrolled_course_ids = list(
+                Registration.objects.filter(student=student).values_list('course_id', flat=True)
+            )
+
+    return render(request, 'courses/courses.html', {
+        'courses': courses,
+        'selected_level': selected_level,
+        'filter_applied': filter_applied,
+        'enrolled_course_ids': enrolled_course_ids,
+    })
+
+
 
 
 def register_view(request):

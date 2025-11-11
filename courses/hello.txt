@@ -1,0 +1,198 @@
+/* General page styling */
+body {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Navbar hover effect */
+.navbar .nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+.navbar .nav-link:hover {
+  color: #ffe600 !important; /* German yellow */
+}
+
+/* Drop shadow to cards & sections */
+.card, .alert {
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Footer */
+footer a:hover {
+  color: #ffe600 !important;
+}
+
+/* Smooth fade-in animation */
+main {
+  animation: fadeIn 0.6s ease-in-out;
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+.hero-section {
+  position: relative;
+  color: #fff;
+}
+.hero-section h1 {
+  animation: fadeInDown 0.8s ease-in-out;
+}
+.hero-section p {
+  animation: fadeInUp 1s ease-in-out;
+}
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Soft hover animation for cards */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons hover effect */
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* Table alignment */
+.table th, .table td {
+  vertical-align: middle;
+}
+/* HERO (corporate) */
+.hero-corporate {
+  min-height: 70vh;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
+  display: block;
+  border-radius: 10px;
+}
+.hero-corporate h1 { letter-spacing: -0.5px; line-height: 1.05; }
+.hero-corporate .btn-primary { background: linear-gradient(90deg,#0b486b,#3a5f7a); border: none; }
+
+/* Trust logos */
+.trust-row img { opacity: 0.85; filter: grayscale(10%); }
+
+/* Metrics strip */
+.metrics-strip { background: #fff; border-top: 1px solid #eef0f2; border-bottom: 1px solid #eef0f2; }
+.metric-value { font-weight:700; font-size:1.4rem; color:#0b486b; }
+
+/* Signup card */
+.corporate-signup { border-radius: 10px; }
+.icon-round { width:56px; height:56px; display:inline-grid; place-items:center; background:#f1f3f5; border-radius:50%; font-weight:700; color:#0b486b; margin:0 auto; }
+
+/* Small, clean blockquote style */
+.blockquote { border-left: 3px solid #e9ecef; padding-left: 1rem; }
+
+/* Responsive tweaks */
+@media (max-width: 991px) {
+  .hero-corporate { min-height: 60vh; padding: 3rem 1rem; }
+  .hero-corporate h1 { font-size: 1.6rem; }
+}
+/* Course card hover animation */
+.hover-transform {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-transform:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive form spacing */
+@media (max-width: 576px) {
+  form.d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+/* ===== How it Works Section ===== */
+.how-it-works {
+  background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+}
+
+.how-it-works h2 {
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.step-card {
+  background: #fff;
+  border-radius: 14px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.step-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.step-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0b486b, #a30000);
+  color: #fff;
+  font-size: 1.8rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover .step-icon {
+  transform: scale(1.1);
+}
+.btn-success[disabled] {
+  opacity: 0.95;
+  cursor: not-allowed;
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.25);
+  font-weight: 600;
+}
+/* --- How DeutschHaus Works (Corporate Aesthetic) --- */
+.hover-transform {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-transform:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.how-it-works h5 {
+  font-size: 1.05rem;
+  color: #0b486b;
+}
+
+.how-it-works p {
+  line-height: 1.6;
+}
+
+/* Smooth fade-in */
+.how-it-works {
+  animation: fadeInUp 0.9s ease-in-out;
+}
+@keyframes fadeInUp {
+  from {opacity: 0; transform: translateY(25px);}
+  to {opacity: 1; transform: translateY(0);}
+}

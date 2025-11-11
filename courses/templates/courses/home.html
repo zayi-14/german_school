@@ -1,94 +1,246 @@
 {% extends 'courses/base.html' %}
 {% load static %}
 
-{% block title %}Learn German Online with DeutschHaus{% endblock %}
+{% block title %}German Language Training · Fluss Deutsch
+{% endblock %}
 
 {% block content %}
 
-<!-- ===== Hero Section ===== -->
-<section class="hero-section text-white text-center py-5" 
-  style="background: linear-gradient(rgba(11,72,107,0.8), rgba(163,0,0,0.7)), url('{% static 'courses/images/berlin-bg.jpg' %}') center/cover no-repeat;">
+<!-- ===== HERO (corporate) ===== -->
+<section class="hero-corporate d-flex align-items-center" aria-label="Hero"
+  style="background: linear-gradient(90deg, rgba(11,72,107,0.92) 0%, rgba(0,0,0,0.75) 100%), url('{% static 'courses/images/berlin-bg.png' %}') center/cover no-repeat; min-height: 88vh;">
   <div class="container py-5">
-    <h1 class="display-5 fw-bold">Master German — From A1 to B2 with Confidence</h1>
-    <p class="lead my-3">
-      Join hundreds of learners improving their German communication through structured, interactive lessons.
-    </p>
-    <a href="{% url 'courses:register' %}" class="btn btn-warning btn-lg shadow-sm px-4 py-2 mt-3">
-      <i class="bi bi-play-circle me-2"></i>Start Learning Now
-    </a>
-  </div>
-</section>
+    <div class="row align-items-center justify-content-between">
+      <!-- Left: headline -->
+      <div class="col-lg-7">
+        <div class="hero-text p-4 rounded" style="background: rgba(0,0,0,0.35); backdrop-filter: blur(3px);">
+          <h1 class="display-5 fw-bold mb-3 text-white" style="text-shadow: 0 4px 12px rgba(0,0,0,0.6); line-height:1.2;">
+            Professional German training for students & workplace
+          </h1>
+          <p class="lead mb-4 text-light" style="max-width:70ch; opacity:0.95;">
+            Structured CEFR-aligned courses (A1→B2), live small-group classes with certified instructors,
+            and a powerful study area to practise and track progress.
+          </p>
 
-<!-- ===== Why Choose Us ===== -->
-<section class="py-5 bg-white">
-  <div class="container text-center">
-    <h2 class="fw-bold mb-4">Why Choose <span class="text-danger">DeutschHaus?</span></h2>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm hover-card">
-          <div class="card-body">
-            <i class="bi bi-people-fill fs-1 text-danger mb-3"></i>
-            <h5 class="card-title">Small Group Classes</h5>
-            <p class="card-text">Engage in personalized sessions with live tutors and interactive activities.</p>
+          <div class="d-flex gap-3 flex-wrap">
+            {% if user.is_authenticated %}
+            <a class="btn btn-warning btn-lg px-4 fw-semibold shadow-sm" href="{% url 'courses:courses' %}">
+              Continue learning
+            </a>
+            {% else %}
+            <a class="btn btn-danger btn-lg px-4 fw-semibold shadow-sm" href="{% url 'courses:register' %}">
+              Enrol now — free trial
+            </a>
+            {% endif %}
+            <a class="btn btn-outline-light btn-lg px-4 fw-semibold shadow-sm" href="{% url 'courses:about' %}">
+              Why Fluss Deutsch
+
+            </a>
+          </div>
+
+          <!-- trust row -->
+          <div class="trust-row d-flex flex-wrap align-items-center gap-4 mt-4">
+            <div class="small text-light opacity-75">Trusted by</div>
+            <img src="{% static 'courses/images/trust_logo_1.png' %}" alt="partner" height="28">
+            <img src="{% static 'courses/images/trust_logo_2.png' %}" alt="partner" height="28">
+            <img src="{% static 'courses/images/trust_logo_3.png' %}" alt="partner" height="28">
           </div>
         </div>
       </div>
 
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm hover-card">
-          <div class="card-body">
-            <i class="bi bi-globe-europe-africa fs-1 text-primary mb-3"></i>
-            <h5 class="card-title">Native-Level Guidance</h5>
-            <p class="card-text">Our trainers have real-world German experience — helping you sound natural.</p>
-          </div>
-        </div>
-      </div>
+      <!-- Right: card with language selector & quick features -->
+      <div class="col-lg-5 mt-4 mt-lg-0">
+        <div class="card shadow-lg border-0 p-4 corporate-signup" style="background: rgba(255,255,255,0.95); border-radius: 12px;">
+          <h5 class="mb-3 fw-semibold text-center text-dark">Start your learning</h5>
 
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm hover-card">
-          <div class="card-body">
-            <i class="bi bi-award fs-1 text-warning mb-3"></i>
-            <h5 class="card-title">Exam Preparation</h5>
-            <p class="card-text">Ace Goethe and TELC exams with focused materials and feedback sessions.</p>
-          </div>
+          <form method="get" action="{% url 'courses:courses' %}">
+            <div class="mb-2">
+              <label class="form-label small text-muted">Select language</label>
+              <select class="form-select" disabled>
+                <option>German (A1–B2)</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">Your level</label>
+              <select class="form-select" name="level">
+                <option value="">Choose level (optional)</option>
+                <option>A1</option>
+                <option>A2</option>
+                <option>B1</option>
+                <option>B2</option>
+              </select>
+            </div>
+
+            <div class="d-grid">
+              {% if user.is_authenticated %}
+              <button type="submit" class="btn btn-outline-success fw-semibold">Browse courses</button>
+              {% else %}
+              <a class="btn btn-success fw-semibold" href="{% url 'courses:register' %}">Start free trial</a>
+              {% endif %}
+            </div>
+          </form>
+
+          <hr class="my-3">
+
+          <ul class="list-unstyled small text-muted mb-0">
+            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Live small-group classes</li>
+            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> CEFR-aligned curriculum</li>
+            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Trackable progress & certificates</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== Courses Preview ===== -->
+<!-- ===== Key metrics (strip) ===== -->
+<section class="metrics-strip py-4" style="background: linear-gradient(90deg,#0b486b,#a30000); border-radius: 10px;">
+  <div class="container">
+    <div class="row text-center text-white">
+      <div class="col-sm-3">
+        <div class=" fs-4 fw-bold">15+</div>
+        <div class="small text-light">Certified instructors</div>
+      </div>
+      <div class="col-sm-3">
+        <div class=" fs-4 fw-bold">500+</div>
+        <div class="small text-light">Learners trained</div>
+      </div>
+      <div class="col-sm-3">
+        <div class="fs-4 fw-bold">CEFR A1→B2</div>
+        <div class="small text-light">Structured levels</div>
+      </div>
+      <div class="col-sm-3">
+        <div class="fs-4 fw-bold">98%</div>
+        <div class="small text-light">Satisfaction rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== How it works (3 steps) ===== -->
+<!-- ===== How Fluss Deutsch Works (Premium Corporate Style) ===== -->
+<section class="py-5 bg-white border-top border-bottom">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-dark mb-2" style="font-size:2rem;">
+        How <span class="text-danger">Fluss Deutsch</span> Works
+      </h2>
+      <p class="text-muted" style="max-width:650px; margin:auto; font-size:0.95rem;">
+        A simple, structured, and human approach to mastering German — designed for real progress and professional confidence.
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center align-items-stretch">
+      <!-- Step 1 -->
+      <div class="col-md-4">
+        <div class="h-100 p-4 bg-light rounded-4 border-0 shadow-sm hover-transform">
+          <div class="mb-3 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                 style="width:60px; height:60px; background-color:#e6f0f7;">
+              <i class="bi bi-clipboard-check text-primary" style="font-size:1.8rem;"></i>
+            </div>
+          </div>
+          <h5 class="fw-semibold text-center mb-2">Assess Your Level</h5>
+          <p class="text-muted small text-center mb-0">
+            Begin with a short placement quiz to identify your CEFR level. We’ll match you with the ideal starting course — no guesswork, no overwhelm.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="col-md-4">
+        <div class="h-100 p-4 bg-light rounded-4 border-0 shadow-sm hover-transform">
+          <div class="mb-3 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                 style="width:60px; height:60px; background-color:#fdecec;">
+              <i class="bi bi-journal-bookmark text-danger" style="font-size:1.8rem;"></i>
+            </div>
+          </div>
+          <h5 class="fw-semibold text-center mb-2">Learn Step-by-Step</h5>
+          <p class="text-muted small text-center mb-0">
+            Join structured A1–B2 live sessions led by certified trainers. Strengthen grammar, speaking, and listening through interactive practice.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="col-md-4">
+        <div class="h-100 p-4 bg-light rounded-4 border-0 shadow-sm hover-transform">
+          <div class="mb-3 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                 style="width:60px; height:60px; background-color:#f8ede8;">
+              <i class="bi bi-award text-warning" style="font-size:1.8rem;"></i>
+            </div>
+          </div>
+          <h5 class="fw-semibold text-center mb-2">Get Certified</h5>
+          <p class="text-muted small text-center mb-0">
+            Prepare confidently for Goethe and TELC exams. Earn an official certificate that strengthens your academic or career profile.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== Featured Courses (clean list) ===== -->
 <section class="py-5 bg-light">
-  <div class="container text-center">
-    <h2 class="fw-bold mb-4">Explore Our German Courses</h2>
-    <div class="row justify-content-center">
+  <div class="container">
+    <h2 class="h3 fw-bold text-center mb-4">Featured courses</h2>
+    <div class="row g-4 justify-content-center">
       {% for course in latest_courses %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 border-0 shadow-sm">
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm hover-transform">
           <div class="card-body">
             <h5 class="fw-bold">{{ course.title }}</h5>
-            <p class="small text-muted">{{ course.get_level_display }} • {{ course.duration_weeks }} weeks</p>
-            <p>{{ course.description|truncatewords:20 }}</p>
-            <a href="{% url 'courses:register' %}" class="btn btn-outline-primary btn-sm">Enroll Now</a>
+            <div class="small text-muted mb-2">{{ course.get_level_display }} • {{ course.duration_weeks }} weeks</div>
+            <p class="text-muted small">{{ course.description|truncatewords:22 }}</p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <strong class="text-danger">₹{{ course.price }}</strong>
+              {% if user.is_authenticated %}
+              <a class="btn btn-outline-success btn-sm" href="{% url 'courses:select_course' course.id %}">Enroll</a>
+              {% else %}
+              <a class="btn btn-outline-primary btn-sm" href="{% url 'courses:register' %}">Register</a>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
       {% empty %}
-      <p>No courses available yet.</p>
+      <p class="text-muted">No courses available currently.</p>
       {% endfor %}
     </div>
-    <a href="{% url 'courses:courses' %}" class="btn btn-danger mt-3 px-4">View All Courses</a>
+    <div class="text-center mt-4">
+      <a class="btn btn-dark px-4" href="{% url 'courses:courses' %}">View all courses</a>
+    </div>
   </div>
 </section>
 
-<!-- ===== CTA Banner ===== -->
-<section class="py-5 text-center text-white" style="background: linear-gradient(90deg,#0b486b,#a30000);">
+<!-- ===== Testimonials (subtle) ===== -->
+<section class="py-5">
   <div class="container">
-    <h3 class="fw-bold mb-3">Ready to speak like a native?</h3>
-    <p class="mb-4">Register today and start your journey toward fluent, confident German communication.</p>
-    <a href="{% url 'courses:register' %}" class="btn btn-warning btn-lg px-4">
-      <i class="bi bi-pencil-square me-2"></i>Join DeutschHaus
-    </a>
+    <h2 class="h4 fw-bold text-center mb-4">What learners say</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <blockquote class="blockquote small text-muted bg-white p-4 shadow-sm rounded">
+          “Great structure and supportive teachers. I passed B1 with confidence.”
+          <footer class="blockquote-footer mt-2">— A. Müller</footer>
+        </blockquote>
+      </div>
+      <div class="col-md-4">
+        <blockquote class="blockquote small text-muted bg-white p-4 shadow-sm rounded">
+          “Professional classes, flexible timings for working people.”
+          <footer class="blockquote-footer mt-2">— S. Patel</footer>
+        </blockquote>
+      </div>
+      <div class="col-md-4">
+        <blockquote class="blockquote small text-muted bg-white p-4 shadow-sm rounded">
+          “Practical materials and regular feedback made all the difference.”
+          <footer class="blockquote-footer mt-2">— L. Becker</footer>
+        </blockquote>
+      </div>
+    </div>
   </div>
 </section>
 
