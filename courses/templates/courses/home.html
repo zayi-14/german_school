@@ -1,246 +1,189 @@
 {% extends 'courses/base.html' %}
 {% load static %}
 
-{% block title %}German Language Training · Fluss Deutsch
-{% endblock %}
+{% block title %}Fluss Deutsch · Home{% endblock %}
 
 {% block content %}
 
-<!-- ===== HERO (corporate) ===== -->
-<section class="hero-corporate d-flex align-items-center" aria-label="Hero"
-  style="background: linear-gradient(90deg, rgba(11,72,107,0.92) 0%, rgba(0,0,0,0.75) 100%), url('{% static 'courses/images/berlin-bg.png' %}') center/cover no-repeat; min-height: 88vh;">
-  <div class="container py-5">
-    <div class="row align-items-center justify-content-between">
-      <!-- Left: headline -->
-      <div class="col-lg-7">
-        <div class="hero-text p-4 rounded" style="background: rgba(0,0,0,0.35); backdrop-filter: blur(3px);">
-          <h1 class="display-5 fw-bold mb-3 text-white" style="text-shadow: 0 4px 12px rgba(0,0,0,0.6); line-height:1.2;">
-            Professional German training for students & workplace
-          </h1>
-          <p class="lead mb-4 text-light" style="max-width:70ch; opacity:0.95;">
-            Structured CEFR-aligned courses (A1→B2), live small-group classes with certified instructors,
-            and a powerful study area to practise and track progress.
-          </p>
+<!-- HERO -->
+<section class="relative hero-height rounded-lg overflow-hidden shadow-lg">
+  <img src="{% static 'courses/images/berlin-bg.png' %}" alt="Berlin"
+       class="absolute inset-0 w-full h-full object-cover brightness-75">
+  <div class="absolute inset-0 bg-gradient-to-r from-slate-900/60 to-slate-900/40"></div>
 
-          <div class="d-flex gap-3 flex-wrap">
-            {% if user.is_authenticated %}
-            <a class="btn btn-warning btn-lg px-4 fw-semibold shadow-sm" href="{% url 'courses:courses' %}">
-              Continue learning
-            </a>
-            {% else %}
-            <a class="btn btn-danger btn-lg px-4 fw-semibold shadow-sm" href="{% url 'courses:register' %}">
-              Enrol now — free trial
-            </a>
-            {% endif %}
-            <a class="btn btn-outline-light btn-lg px-4 fw-semibold shadow-sm" href="{% url 'courses:about' %}">
-              Why Fluss Deutsch
+  <div class="relative z-10 max-w-4xl mx-auto py-20 px-6 text-center text-white">
+    <img src="{% static 'courses/images/german_logo_1.png' %}"
+         alt="logo"
+         class="mx-auto h-32 w-32 rounded-full object-cover mb-6 shadow-lg">
 
-            </a>
-          </div>
+    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">Fluss Deutsch</h1>
 
-          <!-- trust row -->
-          <div class="trust-row d-flex flex-wrap align-items-center gap-4 mt-4">
-            <div class="small text-light opacity-75">Trusted by</div>
-            <img src="{% static 'courses/images/trust_logo_1.png' %}" alt="partner" height="28">
-            <img src="{% static 'courses/images/trust_logo_2.png' %}" alt="partner" height="28">
-            <img src="{% static 'courses/images/trust_logo_3.png' %}" alt="partner" height="28">
-          </div>
-        </div>
-      </div>
+    <p class="max-w-2xl mx-auto text-lg md:text-xl text-slate-100/90 mb-8">
+      Speak German fluently — your pathway to success with structured CEFR courses, live classes, and certified tutors.
+    </p>
 
-      <!-- Right: card with language selector & quick features -->
-      <div class="col-lg-5 mt-4 mt-lg-0">
-        <div class="card shadow-lg border-0 p-4 corporate-signup" style="background: rgba(255,255,255,0.95); border-radius: 12px;">
-          <h5 class="mb-3 fw-semibold text-center text-dark">Start your learning</h5>
-
-          <form method="get" action="{% url 'courses:courses' %}">
-            <div class="mb-2">
-              <label class="form-label small text-muted">Select language</label>
-              <select class="form-select" disabled>
-                <option>German (A1–B2)</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label small text-muted">Your level</label>
-              <select class="form-select" name="level">
-                <option value="">Choose level (optional)</option>
-                <option>A1</option>
-                <option>A2</option>
-                <option>B1</option>
-                <option>B2</option>
-              </select>
-            </div>
-
-            <div class="d-grid">
-              {% if user.is_authenticated %}
-              <button type="submit" class="btn btn-outline-success fw-semibold">Browse courses</button>
-              {% else %}
-              <a class="btn btn-success fw-semibold" href="{% url 'courses:register' %}">Start free trial</a>
-              {% endif %}
-            </div>
-          </form>
-
-          <hr class="my-3">
-
-          <ul class="list-unstyled small text-muted mb-0">
-            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Live small-group classes</li>
-            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> CEFR-aligned curriculum</li>
-            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Trackable progress & certificates</li>
-          </ul>
-        </div>
-      </div>
+    <!-- dynamic levels -->
+    <div class="flex flex-wrap justify-center gap-3">
+      {% if levels %}
+        {% for level in levels %}
+          <a href="{% url 'courses:courses' %}?level={{ level.0 }}"
+             class="px-4 py-2 rounded-lg border border-white/30 bg-white/10 hover:bg-white/20 text-white text-sm backdrop-blur-sm">
+            {{ level.1 }}
+          </a>
+        {% endfor %}
+      {% else %}
+        <a href="{% url 'courses:courses' %}?level=A1" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Beginner A1</a>
+        <a href="{% url 'courses:courses' %}?level=A2" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Elementary A2</a>
+        <a href="{% url 'courses:courses' %}?level=B1" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Intermediate B1</a>
+        <a href="{% url 'courses:courses' %}?level=B2" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Upper Intermediate B2</a>
+      {% endif %}
     </div>
   </div>
 </section>
 
-<!-- ===== Key metrics (strip) ===== -->
-<section class="metrics-strip py-4" style="background: linear-gradient(90deg,#0b486b,#a30000); border-radius: 10px;">
-  <div class="container">
-    <div class="row text-center text-white">
-      <div class="col-sm-3">
-        <div class=" fs-4 fw-bold">15+</div>
-        <div class="small text-light">Certified instructors</div>
-      </div>
-      <div class="col-sm-3">
-        <div class=" fs-4 fw-bold">500+</div>
-        <div class="small text-light">Learners trained</div>
-      </div>
-      <div class="col-sm-3">
-        <div class="fs-4 fw-bold">CEFR A1→B2</div>
-        <div class="small text-light">Structured levels</div>
-      </div>
-      <div class="col-sm-3">
-        <div class="fs-4 fw-bold">98%</div>
-        <div class="small text-light">Satisfaction rate</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== How it works (3 steps) ===== -->
-<!-- ===== How Fluss Deutsch Works (Premium Corporate Style) ===== -->
-<section class="py-5 bg-white border-top border-bottom">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold text-dark mb-2" style="font-size:2rem;">
-        How <span class="text-danger">Fluss Deutsch</span> Works
-      </h2>
-      <p class="text-muted" style="max-width:650px; margin:auto; font-size:0.95rem;">
-        A simple, structured, and human approach to mastering German — designed for real progress and professional confidence.
+<!-- HOW IT WORKS -->
+<section class="py-20 bg-secondary">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-3">Your Path to German Fluency</h2>
+      <p class="text-slate-600 max-w-2xl mx-auto">
+        Clear steps, modern learning methods, and structured guidance — designed for your growth.
       </p>
     </div>
 
-    <div class="row g-4 justify-content-center align-items-stretch">
-      <!-- Step 1 -->
-      <div class="col-md-4">
-        <div class="h-100 p-4 bg-light rounded-4 border-0 shadow-sm hover-transform">
-          <div class="mb-3 text-center">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
-                 style="width:60px; height:60px; background-color:#e6f0f7;">
-              <i class="bi bi-clipboard-check text-primary" style="font-size:1.8rem;"></i>
-            </div>
-          </div>
-          <h5 class="fw-semibold text-center mb-2">Assess Your Level</h5>
-          <p class="text-muted small text-center mb-0">
-            Begin with a short placement quiz to identify your CEFR level. We’ll match you with the ideal starting course — no guesswork, no overwhelm.
-          </p>
-        </div>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
+        <div class="w-14 h-14 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4">📘</div>
+        <h3 class="font-semibold mb-2 text-lg">Choose Your Course</h3>
+        <p class="text-sm text-slate-600">Select your level and the course format that fits your goals.</p>
       </div>
 
-      <!-- Step 2 -->
-      <div class="col-md-4">
-        <div class="h-100 p-4 bg-light rounded-4 border-0 shadow-sm hover-transform">
-          <div class="mb-3 text-center">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
-                 style="width:60px; height:60px; background-color:#fdecec;">
-              <i class="bi bi-journal-bookmark text-danger" style="font-size:1.8rem;"></i>
-            </div>
-          </div>
-          <h5 class="fw-semibold text-center mb-2">Learn Step-by-Step</h5>
-          <p class="text-muted small text-center mb-0">
-            Join structured A1–B2 live sessions led by certified trainers. Strengthen grammar, speaking, and listening through interactive practice.
-          </p>
-        </div>
+      <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
+        <div class="w-14 h-14 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center text-2xl mb-4">✔️</div>
+        <h3 class="font-semibold mb-2 text-lg">Register Easily</h3>
+        <p class="text-sm text-slate-600">Simple registration with flexible payment options.</p>
       </div>
 
-      <!-- Step 3 -->
-      <div class="col-md-4">
-        <div class="h-100 p-4 bg-light rounded-4 border-0 shadow-sm hover-transform">
-          <div class="mb-3 text-center">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
-                 style="width:60px; height:60px; background-color:#f8ede8;">
-              <i class="bi bi-award text-warning" style="font-size:1.8rem;"></i>
-            </div>
-          </div>
-          <h5 class="fw-semibold text-center mb-2">Get Certified</h5>
-          <p class="text-muted small text-center mb-0">
-            Prepare confidently for Goethe and TELC exams. Earn an official certificate that strengthens your academic or career profile.
-          </p>
-        </div>
+      <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
+        <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-4">🏆</div>
+        <h3 class="font-semibold mb-2 text-lg">Master German</h3>
+        <p class="text-sm text-slate-600">Practice regularly and prepare for exams like Goethe/TELC.</p>
       </div>
     </div>
   </div>
 </section>
 
+<!-- FEATURED COURSES (NO IMAGES) -->
+<section class="py-20 bg-slate-50">
+  <div class="max-w-6xl mx-auto px-4">
 
-<!-- ===== Featured Courses (clean list) ===== -->
-<section class="py-5 bg-light">
-  <div class="container">
-    <h2 class="h3 fw-bold text-center mb-4">Featured courses</h2>
-    <div class="row g-4 justify-content-center">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold">Popular Courses</h2>
+      <a href="{% url 'courses:courses' %}" class="text-indigo-600 hover:underline text-sm">View All Courses →</a>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {% for course in latest_courses %}
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm hover-transform">
-          <div class="card-body">
-            <h5 class="fw-bold">{{ course.title }}</h5>
-            <div class="small text-muted mb-2">{{ course.get_level_display }} • {{ course.duration_weeks }} weeks</div>
-            <p class="text-muted small">{{ course.description|truncatewords:22 }}</p>
-            <div class="d-flex justify-content-between align-items-center mt-3">
-              <strong class="text-danger">₹{{ course.price }}</strong>
-              {% if user.is_authenticated %}
-              <a class="btn btn-outline-success btn-sm" href="{% url 'courses:select_course' course.id %}">Enroll</a>
-              {% else %}
-              <a class="btn btn-outline-primary btn-sm" href="{% url 'courses:register' %}">Register</a>
-              {% endif %}
-            </div>
-          </div>
+      <div class="bg-white rounded-xl shadow p-6 hover:shadow-md transition">
+
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-lg">{{ course.title }}</h3>
+          <span class="text-xs px-2 py-1 rounded-full bg-indigo-600 text-white">
+            {{ course.get_level_display }}
+          </span>
         </div>
+
+        <p class="text-sm text-slate-600 mt-3">
+          {{ course.description|truncatewords:18 }}
+        </p>
+
+        <div class="mt-4 flex items-center justify-between text-sm text-slate-600">
+          <span>⏱ {{ course.duration_weeks }} weeks</span>
+          <span class="text-slate-800 font-semibold">₹{{ course.price }}</span>
+        </div>
+
+        <div class="mt-5">
+          {% if user.is_authenticated %}
+            {% if enrolled_ids and course.id in enrolled_ids %}
+              <button class="w-full py-2 bg-gray-100 text-slate-500 rounded" disabled>
+                Enrolled
+              </button>
+            {% else %}
+              <a href="{% url 'courses:select_course' course.id %}"
+                 class="block w-full text-center py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
+                Enroll Now
+              </a>
+            {% endif %}
+          {% else %}
+            <a href="{% url 'courses:register' %}"
+               class="block w-full text-center py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
+              Enroll Now
+            </a>
+          {% endif %}
+        </div>
+
       </div>
       {% empty %}
-      <p class="text-muted">No courses available currently.</p>
+        <p class="text-slate-600">No courses available.</p>
       {% endfor %}
     </div>
-    <div class="text-center mt-4">
-      <a class="btn btn-dark px-4" href="{% url 'courses:courses' %}">View all courses</a>
-    </div>
+
   </div>
 </section>
 
-<!-- ===== Testimonials (subtle) ===== -->
-<section class="py-5">
-  <div class="container">
-    <h2 class="h4 fw-bold text-center mb-4">What learners say</h2>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <blockquote class="blockquote small text-muted bg-white p-4 shadow-sm rounded">
-          “Great structure and supportive teachers. I passed B1 with confidence.”
-          <footer class="blockquote-footer mt-2">— A. Müller</footer>
-        </blockquote>
+<!-- TESTIMONIALS -->
+<!-- TESTIMONIALS -->
+<section class="py-20">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-2xl md:text-3xl font-bold mb-6">What Our Students Say</h2>
+
+    {% if testimonials %}
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      {% for fb in testimonials %}
+      <div class="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+
+        <!-- Avatar -->
+        <div class="flex items-center gap-3 mb-3">
+          <div class="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center text-lg font-bold">
+            {{ fb.student.full_name|slice:":1"|upper }}
+          </div>
+          <div>
+            <div class="font-semibold">{{ fb.student.full_name }}</div>
+            <div class="text-sm text-slate-500">
+              {{ fb.student.email }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="text-amber-500 text-lg mb-2">
+          {% for i in "12345"|slice:":fb.rating" %}
+            ★
+          {% endfor %}
+        </div>
+
+        <p class="text-sm text-slate-600">“{{ fb.message }}”</p>
+
       </div>
-      <div class="col-md-4">
-        <blockquote class="blockquote small text-muted bg-white p-4 shadow-sm rounded">
-          “Professional classes, flexible timings for working people.”
-          <footer class="blockquote-footer mt-2">— S. Patel</footer>
-        </blockquote>
-      </div>
-      <div class="col-md-4">
-        <blockquote class="blockquote small text-muted bg-white p-4 shadow-sm rounded">
-          “Practical materials and regular feedback made all the difference.”
-          <footer class="blockquote-footer mt-2">— L. Becker</footer>
-        </blockquote>
-      </div>
+      {% endfor %}
     </div>
+    {% else %}
+      <p class="text-slate-600">No testimonials yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 text-center">
+    <h3 class="text-2xl font-semibold mb-2">Ready to Begin?</h3>
+    <p class="text-slate-600 mb-6">Join today and start your journey to German fluency.</p>
+    <a href="{% url 'courses:register' %}"
+       class="inline-block px-8 py-3 rounded bg-indigo-600 text-white hover:bg-indigo-700">
+      Register Now
+    </a>
   </div>
 </section>
 

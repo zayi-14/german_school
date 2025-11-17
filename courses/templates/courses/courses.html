@@ -1,78 +1,100 @@
 {% extends 'courses/base.html' %}
-{% block title %}Courses · DeutschHaus{% endblock %}
+{% load static %}
+
+{% block title %}Courses · Fluss Deutsch{% endblock %}
+
 {% block content %}
 
-<div class="container my-5">
-  <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-    <h2 class="fw-bold text-danger mb-3">Available German Courses</h2>
+<div class="max-w-7xl mx-auto py-10">
 
-    <!-- Filter Form -->
-    <form method="get" class="d-flex align-items-center gap-2">
-      <label for="level" class="fw-semibold text-muted me-2">Filter by Level:</label>
-      <select name="level" id="level" class="form-select form-select-sm w-auto">
-        <option value="">All Levels</option>
-        <option value="A1" {% if selected_level == 'A1' %}selected{% endif %}>A1</option>
-        <option value="A2" {% if selected_level == 'A2' %}selected{% endif %}>A2</option>
-        <option value="B1" {% if selected_level == 'B1' %}selected{% endif %}>B1</option>
-        <option value="B2" {% if selected_level == 'B2' %}selected{% endif %}>B2</option>
-      </select>
-      <button type="submit" class="btn btn-danger btn-sm px-3">Apply</button>
-      {% if filter_applied %}
-      <a href="{% url 'courses:courses' %}" class="btn btn-outline-secondary btn-sm">Clear</a>
-      {% endif %}
-    </form>
+  <!-- HEADER -->
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-bold text-slate-800">Our German Courses</h1>
+    <p class="text-gray-600 mt-3 max-w-2xl mx-auto">
+      Find the perfect German course for your level — Beginner to Advanced.
+    </p>
   </div>
 
-  {% if filter_applied %}
-  <div class="alert alert-info shadow-sm mb-4" role="alert">
-    Showing courses for <strong>Level {{ selected_level }}</strong>.
+  <!-- LEVEL FILTER TABS -->
+  <div class="flex justify-center mb-10">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+      {% for code, label in levels %}
+      <a 
+        href="?level={{ code }}"
+        class="
+          px-6 py-3 text-center rounded-lg border text-lg font-medium transition
+          {% if selected_level == code %}
+            bg-indigo-600 text-white border-indigo-600 shadow
+          {% else %}
+            bg-white text-slate-700 border-gray-300 hover:bg-gray-100
+          {% endif %}
+        "
+      >
+        {{ code }}
+      </a>
+      {% endfor %}
+
+    </div>
+  </div>
+
+  <!-- CLEAR FILTER -->
+  {% if selected_level %}
+  <div class="text-center mb-6">
+    <a href="{% url 'courses:courses' %}" class="text-sm text-gray-600 hover:underline">
+      Clear level filter
+    </a>
   </div>
   {% endif %}
 
-  <!-- Courses Grid -->
-  <div class="row g-4">
+  <!-- COURSES GRID -->
+  <div id="coursesContainer" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
     {% for course in courses %}
-    <div class="col-md-6 col-lg-4">
-      <div class="card border-0 shadow-sm h-100 hover-transform">
-        <div class="card-body">
-          <h5 class="fw-bold text-primary mb-2">
-            {{ course.title }}
-            <small class="text-muted ms-1">({{ course.code }})</small>
-          </h5>
-          <p class="small text-muted mb-2">{{ course.get_level_display }} · {{ course.duration_weeks }} weeks</p>
-          <p class="text-muted">{{ course.description|truncatewords:25 }}</p>
+    <div class="bg-white border rounded-xl shadow-sm hover:shadow-md transition p-6 flex flex-col">
 
-          <div class="d-flex justify-content-between align-items-center mt-3">
-            <span class="fw-semibold text-danger">₹{{ course.price }}</span>
+      <h3 class="text-lg font-semibold text-slate-800">
+        {{ course.title }}
+      </h3>
 
-            {% if user.is_authenticated %}
-              {% if course.id in enrolled_course_ids %}
-                <button class="btn btn-success btn-sm" disabled>
-                  <i class="bi bi-check-circle me-1"></i> Enrolled
-                </button>
-              {% else %}
-                <a href="{% url 'courses:select_course' course.id %}" class="btn btn-outline-success btn-sm">
-                  <i class="bi bi-plus-circle me-1"></i> Enroll
-                </a>
-              {% endif %}
-            {% else %}
-              <a href="{% url 'courses:register' %}" class="btn btn-primary btn-sm">
-                <i class="bi bi-person-plus me-1"></i> Register to Enroll
-              </a>
-            {% endif %}
-          </div>
-        </div>
+      <p class="text-sm text-gray-500 mb-2">
+        {{ course.get_level_display }} • {{ course.duration_weeks }} weeks
+      </p>
+
+      <p class="text-gray-600 text-sm flex-grow">
+        {{ course.description|truncatewords:20 }}
+      </p>
+
+      <div class="mt-4 flex justify-between items-center">
+        <span class="text-indigo-600 font-semibold">₹{{ course.price }}</span>
+
+        {% if user.is_authenticated %}
+          {% if course.id in enrolled_course_ids %}
+            <button class="bg-green-100 text-green-700 text-sm px-3 py-1 rounded-md" disabled>
+              Enrolled
+            </button>
+          {% else %}
+            <a href="{% url 'courses:select_course' course.id %}"
+               class="text-sm px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+              Enroll
+            </a>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'courses:register' %}"
+             class="text-sm px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+            Register
+          </a>
+        {% endif %}
       </div>
+
     </div>
     {% empty %}
-    <div class="text-center py-5 text-muted">
-      <i class="bi bi-search fs-1 mb-3"></i>
-      <p class="mb-0">
-        No courses found{% if selected_level %} for level <strong>{{ selected_level }}</strong>{% endif %}.
-      </p>
-      <p><a href="{% url 'courses:courses' %}" class="btn btn-outline-secondary btn-sm mt-2">Show All Courses</a></p>
+    <div class="col-span-full text-center py-10 text-gray-500">
+      <p class="text-lg">No courses found for level <strong>{{ selected_level }}</strong>.</p>
+      <a href="{% url 'courses:courses' %}" class="text-indigo-600 hover:underline">Show all courses</a>
     </div>
     {% endfor %}
+
   </div>
 </div>
 

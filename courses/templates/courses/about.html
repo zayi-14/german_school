@@ -1,50 +1,109 @@
 {% extends 'courses/base.html' %}
 {% load static %}
 
-{% block title %}About Us · DeutschHaus{% endblock %}
+{% block title %}About Fluss Deutsch{% endblock %}
 
 {% block content %}
-<section class="text-center mb-5">
-  <h1 class="fw-bold mb-3 text-danger">About DeutschHaus</h1>
-  <p class="lead text-muted">Your trusted partner in mastering German communication skills.</p>
-</section>
 
-<section class="row align-items-center gy-4">
-  <div class="col-md-6">
-    <img src="{% static 'courses/images/about_german.jpg' %}" alt="German Language Learning" class="img-fluid rounded-4 shadow">
-  </div>
+<div class="max-w-7xl mx-auto px-4 py-16">
 
-  <div class="col-md-6">
-    <h3 class="fw-bold text-primary mb-3">Who We Are</h3>
-    <p>
-      At <strong>DeutschHaus</strong>, we believe learning a language goes beyond grammar — it’s about
-      culture, confidence, and connection. Our courses are carefully designed to help you speak and
-      understand German fluently through immersive and interactive lessons.
-    </p>
-
-    <h3 class="fw-bold text-primary mt-4 mb-3">Our Mission</h3>
-    <p>
-      To empower learners worldwide to communicate effectively in German, whether for travel, work,
-      or personal growth — all while enjoying the process.
+  <!-- HEADER -->
+  <div class="text-center mb-16">
+    <h1 class="text-4xl md:text-5xl font-bold">About Fluss Deutsch</h1>
+    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+      Our mission is to empower learners around the world through the German language,
+      culture, and meaningful communication.
     </p>
   </div>
-</section>
 
-<section class="text-center my-5 py-4 bg-light rounded-4 shadow-sm">
-  <h3 class="fw-bold mb-3">Why Choose Us?</h3>
-  <div class="row g-4">
-    <div class="col-md-4">
-      <i class="bi bi-mortarboard fs-1 text-danger"></i>
-      <p class="fw-semibold mt-2">Certified Trainers</p>
+  <!-- MISSION + VISION -->
+  <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+
+    <!-- Text -->
+    <div>
+      <h2 class="text-3xl font-semibold mb-4 text-indigo-600">Our Mission</h2>
+      <p class="text-gray-600 text-lg mb-6">
+        We believe that learning a new language opens the door to new opportunities.
+        Our mission is to provide high-quality, accessible, and engaging German lessons
+        for learners of all levels.
+      </p>
+
+      <h2 class="text-3xl font-semibold mb-4 text-indigo-600">Our Vision</h2>
+      <p class="text-gray-600 text-lg">
+        We aim to become the leading online platform for German learners —
+        known for innovative teaching, cultural immersion, and a supportive learning community.
+      </p>
     </div>
-    <div class="col-md-4">
-      <i class="bi bi-people fs-1 text-primary"></i>
-      <p class="fw-semibold mt-2">Interactive Small Batches</p>
+
+    <!-- Images -->
+    <div class="grid grid-cols-2 gap-4">
+      <img
+        src="{% static 'courses/images/about_german.jpg' %}"
+        class="rounded-lg shadow-md object-cover w-full h-56 transform hover:scale-105 transition-all duration-300"
+        alt="German culture image 1"
+      />
+
+      <img
+        src="{% static 'courses/images/berlin-bg.png' %}"
+        class="rounded-lg shadow-md object-cover w-full h-56 mt-8 transform hover:scale-105 transition-all duration-300"
+        alt="German culture image 2"
+      />
     </div>
-    <div class="col-md-4">
-      <i class="bi bi-globe fs-1 text-warning"></i>
-      <p class="fw-semibold mt-2">Global Students Community</p>
-    </div>
+
   </div>
-</section>
+
+  <!-- INSTRUCTORS SECTION -->
+  <div class="text-center mb-12">
+    <h2 class="text-4xl font-bold">Meet Our Instructors</h2>
+    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+      Our certified and experienced teachers are the heart of Fluss Deutsch.
+    </p>
+  </div>
+
+  <div id="instructorGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+</div>
+
+<!-- JS DATA FOR INSTRUCTORS -->
+{% block scripts %}
+<script>
+  const instructors = [
+    {
+      name: "Dr. Anja Weber",
+      title: "Founder & Lead Instructor",
+      bio: "With more than 15 years of experience teaching German as a foreign language, Anja creates immersive and effective learning experiences.",
+      avatar: "{% static 'courses/images/instructor1.jpg' %}"
+    },
+    {
+      name: "Lukas Meyer",
+      title: "Senior Instructor",
+      bio: "Lukas specializes in Business German and exam preparation. His dynamic style makes complex grammar easy to understand.",
+      avatar: "{% static 'courses/images/instructor2.jpg' %}"
+    },
+    {
+      name: "Katrin Bauer",
+      title: "Cultural Integration Specialist",
+      bio: "Katrin teaches cultural aspects of the German-speaking world and helps students build confidence in real communication.",
+      avatar: "{% static 'courses/images/instructor3.jpg' %}"
+    }
+  ];
+
+  const grid = document.getElementById("instructorGrid");
+
+  instructors.forEach(inst => {
+    const card = `
+      <div class="border rounded-xl shadow-md p-6 text-center bg-white">
+        <div class="flex justify-center mb-4">
+          <img src="${inst.avatar}" class="w-24 h-24 rounded-full object-cover border" alt="${inst.name}">
+        </div>
+        <h3 class="text-xl font-semibold">${inst.name}</h3>
+        <p class="text-sm text-gray-500 mb-3">${inst.title}</p>
+        <p class="text-gray-600 text-sm">${inst.bio}</p>
+      </div>
+    `;
+    grid.innerHTML += card;
+  });
+</script>
+{% endblock %}
+
 {% endblock %}

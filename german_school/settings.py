@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'replace-with-your-secret-key'
 DEBUG = True
 
-ALLOWED_HOSTS = ['1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,7 +51,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'german_school_db',
         'USER': 'german_user',
-        'PASSWORD': 'pass',
+        'PASSWORD': 'Abhi@24_9517',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Student, Registration
+from .models import Student, Registration, Feedback 
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(), min_length=8)
@@ -29,3 +29,17 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
         fields = ['course', 'notes']
+
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['rating', 'message']
+        widgets = {
+            'rating': forms.RadioSelect(attrs={'class': 'flex gap-2'}),
+            'message': forms.Textarea(attrs={
+                'class': 'w-full p-3 border rounded',
+                'placeholder': 'Write your feedback here...',
+                'rows': 4
+            }),
+        }

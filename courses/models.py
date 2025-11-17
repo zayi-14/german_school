@@ -37,3 +37,23 @@ class Registration(models.Model):
 
     def __str__(self):
         return f"{self.student.full_name} -> {self.course.code}"
+class Feedback(models.Model):
+    RATING_CHOICES = [
+        (1, "1 ★"),
+        (2, "2 ★"),
+        (3, "3 ★"),
+        (4, "4 ★"),
+        (5, "5 ★"),
+    ]
+
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, default=5)
+    message = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)  # Admin approves for homepage
+
+    def __str__(self):
+        return f"{self.student.full_name} — {self.rating}★"
+

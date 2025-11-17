@@ -1,59 +1,223 @@
 {% extends 'courses/base.html' %}
-{% block title %}Register · DeutschHaus{% endblock %}
+{% load static %}
+
+{% block title %}Register · Fluss Deutsch{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card shadow-sm border-0">
-      <div class="card-body">
-        <h4 class="card-title mb-4">Create Your Account</h4>
-        <form id="registerForm" method="post" novalidate>
-          {% csrf_token %}
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" required>
+
+<div class="flex items-center justify-center min-h-screen px-4 py-12 bg-gray-100">
+
+  <div class="bg-white shadow rounded-lg w-full max-w-lg p-6">
+
+    <!-- FORM -->
+    <form id="registerForm" method="POST" autocomplete="off">
+      {% csrf_token %}
+
+      <!-- STEP 1 -->
+      <div id="step1">
+        <h2 class="text-xl font-bold">Register – Step 1 of 2</h2>
+        <p class="text-gray-500 mt-1">Tell us about yourself.</p>
+
+        <div class="mt-6 space-y-4">
+
+          <!-- FULL NAME -->
+          <div>
+            <label class="font-medium">Full Name</label>
+            <input 
+              id="full_name" 
+              name="full_name"
+              class="w-full mt-1 border rounded p-2"
+              placeholder="John Doe"
+              required>
+            <p id="nameError" class="text-red-500 text-sm"></p>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" required>
+
+          <!-- EMAIL -->
+          <div>
+            <label class="font-medium">Email</label>
+            <input 
+              id="email"
+              name="email"
+              type="email"
+              class="w-full mt-1 border rounded p-2"
+              placeholder="you@example.com"
+              required>
+            <p id="emailError" class="text-red-500 text-sm"></p>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" required minlength="8">
+
+          <!-- PHONE -->
+          <div>
+            <label class="font-medium">Phone</label>
+            <input 
+              id="phone"
+              name="phone"
+              class="w-full mt-1 border rounded p-2"
+              placeholder="+91 98765 43210"
+              required>
+            <p id="phoneError" class="text-red-500 text-sm"></p>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Confirm Password</label>
-            <input type="password" name="confirm_password" class="form-control" required minlength="8">
+
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button type="button" id="nextBtn" class="px-4 py-2 bg-indigo-600 text-white rounded flex items-center">
+            Next
+            <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+
+      <!-- STEP 2 -->
+      <div id="step2" class="hidden">
+        <h2 class="text-xl font-bold">Register – Step 2 of 2</h2>
+        <p class="text-gray-500 mt-1">Secure your account.</p>
+
+        <div class="mt-6 space-y-4">
+
+          <!-- USERNAME -->
+          <div>
+            <label class="font-medium">Username</label>
+            <input 
+              id="username"
+              name="username"
+              class="w-full mt-1 border rounded p-2"
+              placeholder="Your username"
+              required>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Full Name</label>
-            <input type="text" name="full_name" class="form-control" required>
+
+          <!-- PASSWORD -->
+          <div>
+            <label class="font-medium">Password</label>
+            <input 
+              id="password"
+              name="password"
+              type="password"
+              class="w-full mt-1 border rounded p-2"
+              required>
+            <p id="passwordError" class="text-red-500 text-sm"></p>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Phone</label>
-            <input type="tel" name="phone" class="form-control" placeholder="+91..." required>
+
+          <!-- CONFIRM PASSWORD -->
+          <div>
+            <label class="font-medium">Confirm Password</label>
+            <input 
+              id="confirmPassword"
+              name="confirm_password"
+              type="password"
+              class="w-full mt-1 border rounded p-2"
+              required>
+            <p id="confirmPasswordError" class="text-red-500 text-sm"></p>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Select Course</label>
-            <select name="course" class="form-select" required>
-              <option value="">-- Choose Course --</option>
-              {% for course in reg_form.fields.course.queryset %}
-                <option value="{{ course.id }}">{{ course.title }} ({{ course.level }})</option>
+
+          <!-- COURSE DROPDOWN (Django dynamic) -->
+          <div>
+            <label class="font-medium">Select Course (Optional)</label>
+            <select 
+              id="course" 
+              name="course"
+              class="w-full mt-1 border rounded p-2">
+              <option value="">Choose your first course</option>
+              {% for c in courses %}
+                <option value="{{ c.id }}">{{ c.title }} ({{ c.level }})</option>
               {% endfor %}
             </select>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Notes (optional)</label>
-            <textarea name="notes" class="form-control"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Register</button>
-        </form>
-        <p class="text-center mt-3 small">Already have an account?
-                    <a href="{% url 'courses:login' %}"
-                        class="text-decoration-none text-primary fw-semibold">login</a>
-                </p>
+
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button type="button" id="backBtn" class="px-4 py-2 border rounded flex items-center">
+            <i data-lucide="arrow-left" class="mr-2 w-4 h-4"></i>
+            Back
+          </button>
+
+          <button type="submit" id="submitBtn" class="px-4 py-2 rounded gradient-button flex items-center">
+            <span id="submitText">Finish Registration</span>
+            <svg id="loader" class="animate-spin hidden ml-2 h-4 w-4" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4"></circle>
+              <path class="opacity-75" fill="white"
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 018 8h-4l3 3-3 3h4a8 8 0 01-8 8v-4l-3 3 3 3v-4a8 8 0 01-8-8z">
+              </path>
+            </svg>
+          </button>
+        </div>
       </div>
+    </form>
+
+    <div class="mt-4 text-center">
+      <p class="text-sm text-gray-600">
+        Already have an account?
+        <a href="{% url 'courses:login' %}" class="text-indigo-600 font-semibold hover:underline">Login</a>
+      </p>
     </div>
+
   </div>
 </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+
+  const step1 = document.getElementById("step1");
+  const step2 = document.getElementById("step2");
+
+  // ---------- STEP 1 VALIDATION ----------
+  function validateStep1() {
+    let ok = true;
+
+    const name = full_name.value.trim();
+    const emailVal = email.value.trim();
+    const phoneVal = phone.value.trim();
+
+    nameError.textContent = name.length < 2 ? "Name must be at least 2 characters." : "";
+    emailError.textContent = !emailVal.match(/^\S+@\S+\.\S+$/) ? "Enter a valid email." : "";
+    phoneError.textContent = phoneVal.length < 10 ? "Enter a valid phone number." : "";
+
+    if (name.length < 2) ok = false;
+    if (!emailVal.match(/^\S+@\S+\.\S+$/)) ok = false;
+    if (phoneVal.length < 10) ok = false;
+
+    return ok;
+  }
+
+  document.getElementById("nextBtn").onclick = () => {
+    if (validateStep1()) {
+      step1.classList.add("hidden");
+      step2.classList.remove("hidden");
+    }
+  };
+
+  document.getElementById("backBtn").onclick = () => {
+    step2.classList.add("hidden");
+    step1.classList.remove("hidden");
+  };
+
+
+  // ---------- FINAL SUBMIT ----------
+  document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let pass = password.value;
+    let confirm = confirmPassword.value;
+
+    passwordError.textContent = pass.length < 8 ? "Password must be at least 8 characters." : "";
+    confirmPasswordError.textContent = pass !== confirm ? "Passwords do not match." : "";
+
+    if (pass.length < 8 || pass !== confirm) return;
+
+    // show loading UI
+    submitText.textContent = "Registering...";
+    loader.classList.remove("hidden");
+
+    // Allow Django to handle the POST
+    setTimeout(() => {
+      this.submit();
+    }, 500);
+  });
+</script>
 {% endblock %}

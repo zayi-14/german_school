@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import Course, Student, Registration
-from .forms import UserRegistrationForm, StudentForm, RegistrationForm
+from .models import Course, Student, Registration, Feedback
+from .forms import UserRegistrationForm, StudentForm, RegistrationForm, FeedbackForm
 from django.conf import settings
 import os
 
@@ -46,20 +46,42 @@ def send_whatsapp_via_twilio(to_number, message_text):
     return msg.sid is not None
 
 # --- views ---
+from .models import Feedback
+
 def home(request):
-    latest_courses = Course.objects.all()[:4]
-    return render(request, 'courses/home.html', {'latest_courses': latest_courses})
+    latest_courses = Course.objects.all()[:6]   # your existing logic
+    enrolled_ids = []  # if you have this
+
+    # Load approved testimonials
+    testimonials = Feedback.objects.filter(is_approved=True).order_by('-created_at')[:6]
+
+    levels = [
+        ('A1', 'Beginner A1'),
+        ('A2', 'Elementary A2'),
+        ('B1', 'Intermediate B1'),
+        ('B2', 'Upper Intermediate B2'),
+    ]
+
+    context = {
+        'latest_courses': latest_courses,
+        'enrolled_ids': enrolled_ids,
+        'levels': levels,
+        'testimonials': testimonials,
+    }
+    return render(request, 'courses/home.html', context)
+
 
 def courses_list(request):
     selected_level = request.GET.get('level')
     courses = Course.objects.all()
 
+    # Apply level filter
     if selected_level:
         courses = courses.filter(level=selected_level)
 
     filter_applied = bool(selected_level)
 
-    # ✅ Fetch enrolled courses for logged-in student
+    # Fetch enrolled courses for logged-in student
     enrolled_course_ids = []
     if request.user.is_authenticated:
         student = Student.objects.filter(user=request.user).first()
@@ -68,8 +90,17 @@ def courses_list(request):
                 Registration.objects.filter(student=student).values_list('course_id', flat=True)
             )
 
+    # LEVEL TABS for the UI
+    levels = [
+        ('A1', 'A1 Beginner'),
+        ('A2', 'A2 Elementary'),
+        ('B1', 'B1 Intermediate'),
+        ('B2', 'B2 Upper Intermediate'),
+    ]
+
     return render(request, 'courses/courses.html', {
         'courses': courses,
+        'levels': levels,                   # ⭐ Required for the tab buttons
         'selected_level': selected_level,
         'filter_applied': filter_applied,
         'enrolled_course_ids': enrolled_course_ids,
@@ -78,54 +109,96 @@ def courses_list(request):
 
 
 
+
 def register_view(request):
     if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        student_form = StudentForm(request.POST)
-        reg_form = RegistrationForm(request.POST)
+        # Extract POST data manually (since we are not using Django forms on UI)
+        username = request.POST.get('username')
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        course_id = request.POST.get('course')
 
-        if user_form.is_valid() and student_form.is_valid() and reg_form.is_valid():
-            # Create Django user
-            u = user_form.save(commit=False)
-            pwd = user_form.cleaned_data['password']
-            u.set_password(pwd)
-            u.save()
+        # Backend validation
+        if not all([username, full_name, email, phone, password, confirm_password]):
+            messages.error(request, "All fields are required.")
+            return redirect('courses:register')
 
-            # Create Student
-            student = student_form.save(commit=False)
-            student.user = u
-            student.save()
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('courses:register')
 
-            # Create Registration
-            registration = reg_form.save(commit=False)
-            registration.student = student
-            registration.save()
+        # Create Django user
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken.")
+            return redirect('courses:register')
 
-            # Send WhatsApp to owner
-            owner_whatsapp = os.environ.get('OWNER_WHATSAPP_NUMBER')  # e.g. '9198xxxxxx' with country code
-            message_text = (f"New registration:\nName: {student.full_name}\n"
-                            f"Email: {student.email}\nPhone: {student.phone}\n"
-                            f"Course: {registration.course.title} ({registration.course.code})\n"
-                            f"Registered at: {registration.registered_at}")
-            sent = False
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already registered.")
+            return redirect('courses:register')
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            email=email
+        )
+
+        # Create Student profile
+        student = Student.objects.create(
+            user=user,
+            full_name=full_name,
+            email=email,
+            phone=phone,
+        )
+
+        # Register for course only if selected
+        registration = None
+        if course_id:
+            try:
+                course = Course.objects.get(id=course_id)
+                registration = Registration.objects.create(
+                    student=student,
+                    course=course
+                )
+            except Course.DoesNotExist:
+                pass  # Ignore if invalid course ID
+
+        # WhatsApp notification to owner
+        owner_whatsapp = os.environ.get('OWNER_WHATSAPP_NUMBER')
+
+        if registration:
+            message_text = (
+                f"New registration:\n"
+                f"Name: {student.full_name}\n"
+                f"Email: {student.email}\n"
+                f"Phone: {student.phone}\n"
+                f"Course: {registration.course.title} ({registration.course.code})\n"
+                f"Registered at: {registration.registered_at}"
+            )
+        else:
+            message_text = (
+                f"New registration (no course selected):\n"
+                f"Name: {student.full_name}\n"
+                f"Email: {student.email}\n"
+                f"Phone: {student.phone}"
+            )
+
+        sent = False
+        if owner_whatsapp:
             if os.environ.get('WHATSAPP_ACCESS_TOKEN'):
                 sent = send_whatsapp_via_meta(owner_whatsapp, message_text)
             elif os.environ.get('TWILIO_ACCOUNT_SID'):
                 sent = send_whatsapp_via_twilio(owner_whatsapp, message_text)
 
-            messages.success(request, 'Registration successful! We have notified the owner.')
-            return redirect('courses:login')
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        user_form = UserRegistrationForm()
-        student_form = StudentForm()
-        reg_form = RegistrationForm()
+        messages.success(request, "Registration successful! You can now login.")
+        return redirect('courses:login')
 
+    # GET request
+    courses = Course.objects.all()  # For dropdown
     return render(request, 'courses/register.html', {
-        'user_form': user_form,
-        'student_form': student_form,
-        'reg_form': reg_form,
+        "courses": courses
     })
 
 
@@ -208,3 +281,30 @@ def delete_course(request, course_id):
     else:
         messages.error(request, "Course not found or already deleted.")
     return redirect('courses:profile')
+
+
+@login_required
+def give_feedback(request):
+    student = Student.objects.filter(user=request.user).first()
+
+    if not student:
+        messages.error(request, "You must complete your profile to give feedback.")
+        return redirect('courses:profile')
+
+    # Must be enrolled to give feedback
+    if not Registration.objects.filter(student=student).exists():
+        messages.error(request, "Enroll in a course before giving feedback.")
+        return redirect('courses:profile')
+
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            fb = form.save(commit=False)
+            fb.student = student
+            fb.save()
+            messages.success(request, "Thank you! Your feedback has been submitted.")
+            return redirect('courses:profile')
+    else:
+        form = FeedbackForm()
+
+    return render(request, 'courses/feedback_form.html', {'form': form})
