@@ -3,181 +3,163 @@
 <head>
   {% load static %}
 
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-  <title>{% block title %}Fluss Deutsch — Learn German{% endblock %}</title>
+  <title>{% block title %}Fluss Deutsch — Learn German Professionally{% endblock %}</title>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="{% static 'courses/css/style.css' %}">
-  
+  <!-- Premium Font (Manrope) -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
   <style>
-    .backdrop-blur-sm { backdrop-filter: blur(6px); }
-    .hero-height { min-height: 78vh; }
+    body { font-family: 'Manrope', sans-serif; }
+    .glass {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+    }
   </style>
+
+  <link rel="stylesheet" href="{% static 'courses/css/style.css' %}">
 </head>
 
 <body class="bg-gray-50 text-slate-800 antialiased">
 
-  <!-- ================= NAVBAR ================= -->
-  <header class="w-full bg-white/90 backdrop-blur-sm border-b border-gray-100 fixed top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- ================= NAVBAR ================= -->
+<header class="fixed top-0 w-full z-50 glass border-b border-white/20 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="h-16 flex items-center justify-between">
 
-      <div class="flex items-center justify-between h-16">
+      <!-- LOGO -->
+      <a href="{% url 'courses:home' %}" class="flex items-center gap-3 group">
+        <img src="{% static 'courses/images/german_logo_1.png' %}" class="h-11 w-11 rounded-full shadow-md">
+        <span class="font-bold text-lg tracking-tight group-hover:text-indigo-600 transition">
+          Fluss <span class="text-indigo-600">Deutsch</span>
+        </span>
+      </a>
 
-        <!-- Logo -->
-        <a href="{% url 'courses:home' %}" class="flex items-center gap-3">
-          <img src="{% static 'courses/images/german_logo_1.png' %}"
-               alt="Fluss Deutsch" 
-               class="h-10 w-10 rounded-full object-cover">
-          <div class="leading-tight">
-            <div class="text-sm font-semibold">Fluss</div>
-            <div class="text-sm font-semibold text-indigo-600">Deutsch</div>
-          </div>
-        </a>
+      <!-- NAV (Centered on desktop) -->
+      <nav class="hidden md:flex items-center gap-10 text-sm font-medium">
+        <a href="{% url 'courses:home' %}" class="hover:text-indigo-600 transition">Home</a>
+        <a href="{% url 'courses:courses' %}" class="hover:text-indigo-600 transition">Courses</a>
+        <a href="{% url 'courses:about' %}" class="hover:text-indigo-600 transition">About</a>
+        <a href="{% url 'courses:contact' %}" class="hover:text-indigo-600 transition">Contact</a>
+      </nav>
 
-        <!-- Desktop Nav -->
-        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-700">
-          <a href="{% url 'courses:home' %}" class="hover:text-indigo-600">Home</a>
-          <a href="{% url 'courses:courses' %}" class="hover:text-indigo-600">Courses</a>
-          <a href="{% url 'courses:about' %}" class="hover:text-indigo-600">About</a>
-          <a href="{% url 'courses:contact' %}" class="hover:text-indigo-600">Contact</a>
-        </nav>
-
-        <!-- Desktop Auth -->
-        <div class="hidden md:flex items-center gap-3">
-          {% if user.is_authenticated %}
-            <a href="{% url 'courses:profile' %}"
-               class="text-sm text-slate-700 hover:text-indigo-600 flex items-center gap-2">
-              <i class="bi bi-person-circle"></i>{{ user.username }}
-            </a>
-            <a href="{% url 'courses:logout' %}"
-               class="text-sm text-red-600 hover:underline">Logout</a>
-          {% else %}
-            <a href="{% url 'courses:login' %}" class="text-sm text-slate-700 hover:text-indigo-600">Login</a>
-            <a href="{% url 'courses:register' %}"
-               class="px-3 py-2 rounded bg-indigo-600 text-white text-sm hover:bg-indigo-700">
-              Register
-            </a>
-          {% endif %}
-        </div>
-
-        <!-- Mobile Hamburger -->
-        <button id="mobileMenuBtn" class="md:hidden p-2 rounded border border-gray-300">
-          <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2"
-               viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Mobile Menu -->
-    <div id="mobileMenu"
-         class="hidden md:hidden bg-white border-b border-gray-200 shadow-sm">
-
-      <nav class="px-4 py-4 flex flex-col gap-4 text-slate-700 text-sm">
-
-        <a href="{% url 'courses:home' %}" class="hover:text-indigo-600">Home</a>
-        <a href="{% url 'courses:courses' %}" class="hover:text-indigo-600">Courses</a>
-        <a href="{% url 'courses:about' %}" class="hover:text-indigo-600">About</a>
-        <a href="{% url 'courses:contact' %}" class="hover:text-indigo-600">Contact</a>
-
-        <hr>
-
+      <!-- AUTH BUTTONS -->
+      <div class="hidden md:flex items-center gap-4">
         {% if user.is_authenticated %}
-          <a href="{% url 'courses:profile' %}" class="hover:text-indigo-600">
-            Profile ({{ user.username }})
+          <a href="{% url 'courses:profile' %}" class="text-sm font-medium hover:text-indigo-600">
+            {{ user.username }}
           </a>
-          <a href="{% url 'courses:logout' %}" class="text-red-600 hover:underline">
+          <a href="{% url 'courses:logout' %}" class="text-sm text-red-500 hover:text-red-600">
             Logout
           </a>
         {% else %}
-          <a href="{% url 'courses:login' %}" class="hover:text-indigo-600">Login</a>
+          <a href="{% url 'courses:login' %}" class="text-sm hover:text-indigo-600">Login</a>
           <a href="{% url 'courses:register' %}"
-             class="px-3 py-2 bg-indigo-600 text-white rounded w-max">
+             class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm hover:bg-indigo-700 shadow">
             Register
           </a>
         {% endif %}
+      </div>
 
-      </nav>
+      <!-- MOBILE MENU BUTTON -->
+      <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg border shadow-sm bg-white/50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
     </div>
-  </header>
+  </div>
 
-  <!-- ================= MAIN CONTENT ================= -->
-  <main class="pt-20">
-    <div class="w-full">
+  <!-- MOBILE MENU -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t shadow-lg">
+    <nav class="px-4 py-4 flex flex-col gap-4 text-sm">
 
-      {% if messages %}
-        <div class="space-y-2 mb-6 px-4">
-          {% for message in messages %}
-            <div class="rounded-md p-3 text-sm
-              {% if message.tags == 'error' %}bg-red-50 text-red-700
-              {% elif message.tags == 'success' %}bg-green-50 text-green-700
-              {% else %}bg-blue-50 text-slate-800{% endif %}">
-              {{ message }}
-            </div>
-          {% endfor %}
-        </div>
+      <a href="{% url 'courses:home' %}" class="hover:text-indigo-600">Home</a>
+      <a href="{% url 'courses:courses' %}" class="hover:text-indigo-600">Courses</a>
+      <a href="{% url 'courses:about' %}" class="hover:text-indigo-600">About</a>
+      <a href="{% url 'courses:contact' %}" class="hover:text-indigo-600">Contact</a>
+
+      <hr>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'courses:profile' %}" class="hover:text-indigo-600">Profile</a>
+        <a href="{% url 'courses:logout' %}" class="text-red-500 hover:text-red-600">Logout</a>
+      {% else %}
+        <a href="{% url 'courses:login' %}" class="hover:text-indigo-600">Login</a>
+        <a href="{% url 'courses:register' %}"
+           class="px-4 py-2 bg-indigo-600 text-white rounded-lg w-max hover:bg-indigo-700 shadow">
+          Register
+        </a>
       {% endif %}
+    </nav>
+  </div>
+</header>
 
-      {% block content %}
-      {% endblock %}
-    </div>
-  </main>
-
-  <!-- ================= FOOTER ================= -->
-  <footer class="bg-slate-900 text-gray-300 mt-16">
-    <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8 grid gap-8 grid-cols-1 md:grid-cols-3">
-
-      <div>
-        <div class="flex items-center gap-3 mb-3">
-          <img src="{% static 'courses/images/german_logo.jpg' %}" class="h-10 w-10 rounded-full object-cover">
-          <div>
-            <div class="text-white font-semibold">Fluss Deutsch</div>
-            <div class="text-sm">Professional German training</div>
-          </div>
+<!-- ================= MAIN ================= -->
+<main class="pt-24">
+  {% if messages %}
+    <div class="max-w-4xl mx-auto px-4 mb-6">
+      {% for message in messages %}
+        <div class="p-3 rounded-lg mb-2 text-sm
+          {% if message.tags == 'error' %} bg-red-100 text-red-700
+          {% elif message.tags == 'success' %} bg-green-100 text-green-700
+          {% else %} bg-blue-100 text-blue-700 {% endif %}">
+          {{ message }}
         </div>
-        <p class="text-sm text-slate-400">
-          Structured CEFR courses, live classes and supportive teachers helping you every step.
-        </p>
-      </div>
-
-      <div>
-        <h4 class="text-white font-semibold mb-2">Courses</h4>
-        <ul class="space-y-2 text-sm">
-          <li><a href="{% url 'courses:courses' %}?level=A1" class="hover:text-white">A1 — Beginner</a></li>
-          <li><a href="{% url 'courses:courses' %}?level=A2" class="hover:text-white">A2 — Elementary</a></li>
-          <li><a href="{% url 'courses:courses' %}?level=B1" class="hover:text-white">B1 — Intermediate</a></li>
-          <li><a href="{% url 'courses:courses' %}?level=B2" class="hover:text-white">B2 — Upper-Intermediate</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="text-white font-semibold mb-2">Contact</h4>
-        <p class="text-sm">support@flussdeutsch.com</p>
-        <p class="text-sm mt-2">© {{ now.year }} Fluss Deutsch</p>
-      </div>
-
+      {% endfor %}
     </div>
-  </footer>
+  {% endif %}
 
-  <!-- ================= SCRIPTS ================= -->
-  <script>
-    const menuBtn = document.getElementById("mobileMenuBtn");
-    const mobileMenu = document.getElementById("mobileMenu");
+  {% block content %}{% endblock %}
+</main>
 
-    menuBtn.addEventListener("click", () => {
-      mobileMenu.classList.toggle("hidden");
-    });
-  </script>
+<!-- ================= FOOTER ================= -->
+<footer class="bg-slate-900 text-gray-300 mt-20">
+  <div class="max-w-7xl mx-auto px-4 py-12 grid sm:grid-cols-3 gap-8">
 
-  {% block scripts %}{% endblock %}
+    <div>
+      <h3 class="font-semibold text-white mb-3">Fluss Deutsch</h3>
+      <p class="text-sm text-slate-400">
+        Learn German professionally with structured CEFR courses and expert tutors.
+      </p>
+    </div>
+
+    <div>
+      <h4 class="font-semibold text-white mb-3">Courses</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="?level=A1" class="hover:text-white">A1 — Beginner</a></li>
+        <li><a href="?level=A2" class="hover:text-white">A2 — Elementary</a></li>
+        <li><a href="?level=B1" class="hover:text-white">B1 — Intermediate</a></li>
+        <li><a href="?level=B2" class="hover:text-white">B2 — Upper Intermediate</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="font-semibold text-white mb-3">Contact</h4>
+      <p class="text-sm">support@flussdeutsch.com</p>
+      <p class="text-sm mt-2">© {{ now.year }} Fluss Deutsch</p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- Mobile menu script -->
+<script>
+  const btn = document.getElementById("mobileMenuBtn");
+  const menu = document.getElementById("mobileMenu");
+
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
+
+{% block scripts %}{% endblock %}
 
 </body>
 </html>

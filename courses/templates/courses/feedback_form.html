@@ -1,36 +1,102 @@
 {% extends 'courses/base.html' %}
 {% load static %}
 
-{% block title %}Give Feedback{% endblock %}
+{% block title %}Give Feedback · Fluss Deutsch{% endblock %}
 
 {% block content %}
-<div class="max-w-lg mx-auto bg-white shadow p-8 rounded-lg mt-10">
 
-    <h2 class="text-2xl font-bold mb-4 text-center">Give Feedback ⭐</h2>
-    <p class="text-slate-600 text-center mb-6">Your feedback helps us improve and inspires future students.</p>
+<div class="min-h-[70vh] flex items-center justify-center px-4 py-10">
 
-    <form method="POST">
-        {% csrf_token %}
+  <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8">
 
-        <!-- Rating -->
-        <label class="block mb-2 font-semibold text-slate-700">Rating</label>
-        <div class="flex gap-3 text-xl mb-5">
-            {% for value, label in form.rating.field.choices %}
-                <label class="flex items-center gap-1 cursor-pointer">
-                    <input type="radio" name="rating" value="{{ value }}" class="accent-yellow-500">
-                    <span>{{ value }} ★</span>
-                </label>
-            {% endfor %}
-        </div>
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h2 class="text-3xl font-bold text-slate-800">Share Your Experience</h2>
+      <p class="text-slate-500 text-sm mt-2">
+        Your feedback helps other students choose the right course.
+      </p>
+    </div>
 
-        <!-- Message -->
-        <label class="block mb-2 font-semibold text-slate-700">Message</label>
-        {{ form.message }}
+    <!-- FORM -->
+    <form method="POST" id="feedbackForm">
+      {% csrf_token %}
 
-        <button type="submit"
-                class="w-full mt-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-            Submit Feedback
-        </button>
+      <!-- Rating -->
+      <label class="block text-sm font-semibold mb-2 text-slate-700">Rate your experience</label>
+
+      <div class="flex justify-center gap-3 text-3xl mb-5">
+        {% for value, label in form.rating.field.choices %}
+          <label class="cursor-pointer transition-transform hover:scale-110">
+            <input type="radio" name="rating" value="{{ value }}" class="hidden peer" />
+            <span class="text-gray-300 peer-checked:text-yellow-500">★</span>
+          </label>
+        {% endfor %}
+      </div>
+
+      <!-- Message -->
+      <label class="block text-sm font-semibold mb-2 text-slate-700">Your feedback</label>
+      {{ form.message }}
+
+      <!-- Submit -->
+      <button type="submit"
+              id="submitBtn"
+              class="w-full mt-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition flex items-center justify-center gap-2">
+        <span id="submitText">Submit Feedback</span>
+        <svg id="spinner" class="hidden animate-spin w-5 h-5" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="3" fill="none"></circle>
+          <path class="opacity-75" fill="white" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 018 8z"></path>
+        </svg>
+      </button>
     </form>
+
+  </div>
 </div>
+
+
+<!-- SUCCESS POPUP -->
+<div id="successPopup" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-2xl p-8 shadow-xl text-center max-w-sm">
+    <div class="text-5xl text-green-500 mb-4">✔</div>
+    <h3 class="text-xl font-semibold mb-2">Feedback Submitted!</h3>
+    <p class="text-sm text-slate-600 mb-4">Thank you for helping improve Fluss Deutsch.</p>
+    <button onclick="closePopup()"
+            class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+      Done
+    </button>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const form = document.getElementById("feedbackForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const spinner = document.getElementById("spinner");
+  const submitText = document.getElementById("submitText");
+  const popup = document.getElementById("successPopup");
+
+  // Popup handler
+  function closePopup() {
+    popup.classList.add("hidden");
+    window.location.href = "{% url 'courses:profile' %}";
+  }
+
+  // Enhance form
+  form.addEventListener("submit", function() {
+    submitBtn.disabled = true;
+    spinner.classList.remove("hidden");
+    submitText.textContent = "Submitting...";
+  });
+
+  // If Django sends success message → show popup
+  {% if messages %}
+    {% for message in messages %}
+      {% if "submitted" in message|lower %}
+        popup.classList.remove("hidden");
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</script>
 {% endblock %}

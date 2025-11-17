@@ -1,190 +1,239 @@
 {% extends 'courses/base.html' %}
 {% load static %}
 
-{% block title %}Fluss Deutsch · Home{% endblock %}
+{% block title %}Fluss Deutsch · Learn German Professionally{% endblock %}
 
 {% block content %}
 
-<!-- HERO -->
-<section class="relative hero-height rounded-lg overflow-hidden shadow-lg">
-  <img src="{% static 'courses/images/berlin-bg.png' %}" alt="Berlin"
-       class="absolute inset-0 w-full h-full object-cover brightness-75">
-  <div class="absolute inset-0 bg-gradient-to-r from-slate-900/60 to-slate-900/40"></div>
+<style>
+/* HIDE SCROLLBAR FOR TESTIMONIALS */
+.scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
+</style>
 
-  <div class="relative z-10 max-w-4xl mx-auto py-20 px-6 text-center text-white">
+<!-- ================= HERO ================= -->
+<section class="relative py-28 overflow-hidden bg-gradient-to-br from-indigo-900 via-sky-900 to-indigo-800 text-white">
+
+  <!-- Decorative blur circles -->
+  <div class="absolute top-10 left-10 w-72 h-72 bg-indigo-500/20 blur-3xl rounded-full"></div>
+  <div class="absolute bottom-10 right-10 w-96 h-96 bg-sky-500/20 blur-3xl rounded-full"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 text-center">
+
+    <!-- Logo -->
     <img src="{% static 'courses/images/german_logo_1.png' %}"
-         alt="logo"
-         class="mx-auto h-32 w-32 rounded-full object-cover mb-6 shadow-lg">
+         class="mx-auto h-32 w-32 rounded-full shadow-xl ring-4 ring-white/40 mb-6 animate-[bounce_6s_infinite]"
+         alt="Logo">
 
-    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">Fluss Deutsch</h1>
+    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+      Master German with <span class="text-yellow-300">Confidence</span>
+    </h1>
 
-    <p class="max-w-2xl mx-auto text-lg md:text-xl text-slate-100/90 mb-8">
-      Speak German fluently — your pathway to success with structured CEFR courses, live classes, and certified tutors.
+    <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-100/90">
+      CEFR-aligned courses, interactive lessons, and certified trainers — designed to take you from A1 to B2.
     </p>
 
-    <!-- dynamic levels -->
-    <div class="flex flex-wrap justify-center gap-3">
-      {% if levels %}
-        {% for level in levels %}
-          <a href="{% url 'courses:courses' %}?level={{ level.0 }}"
-             class="px-4 py-2 rounded-lg border border-white/30 bg-white/10 hover:bg-white/20 text-white text-sm backdrop-blur-sm">
-            {{ level.1 }}
-          </a>
-        {% endfor %}
-      {% else %}
-        <a href="{% url 'courses:courses' %}?level=A1" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Beginner A1</a>
-        <a href="{% url 'courses:courses' %}?level=A2" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Elementary A2</a>
-        <a href="{% url 'courses:courses' %}?level=B1" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Intermediate B1</a>
-        <a href="{% url 'courses:courses' %}?level=B2" class="px-4 py-2 rounded-lg bg-white/10 border border-white/30 hover:bg-white/20">Upper Intermediate B2</a>
-      {% endif %}
+    <!-- Level Buttons -->
+    <div class="flex flex-wrap justify-center gap-3 mt-8">
+      {% for code, level_name in levels %}
+        <a href="{% url 'courses:courses' %}?level={{ code }}"
+           class="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 backdrop-blur-sm text-white">
+          {{ level_name }}
+        </a>
+      {% endfor %}
     </div>
+
+    <!-- CTA -->
+    <div class="mt-10">
+      <a href="{% url 'courses:register' %}"
+         class="inline-block px-10 py-3 rounded-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold shadow-xl">
+        Start Learning Now
+      </a>
+    </div>
+
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="py-20 bg-secondary">
-  <div class="max-w-6xl mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-3">Your Path to German Fluency</h2>
-      <p class="text-slate-600 max-w-2xl mx-auto">
-        Clear steps, modern learning methods, and structured guidance — designed for your growth.
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-800">How Fluss Deutsch Helps You Succeed</h2>
+      <p class="text-slate-500 mt-3 max-w-2xl mx-auto">
+        Everything you need to speak German fluently — made simple.
       </p>
     </div>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
-        <div class="w-14 h-14 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4">📘</div>
-        <h3 class="font-semibold mb-2 text-lg">Choose Your Course</h3>
-        <p class="text-sm text-slate-600">Select your level and the course format that fits your goals.</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <div class="p-8 bg-white rounded-2xl shadow hover:shadow-lg transition">
+        <div class="w-14 h-14 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mb-4">📘</div>
+        <h3 class="font-semibold text-lg mb-2">Structured Levels A1–B2</h3>
+        <p class="text-slate-600">CEFR-aligned courses designed for smooth progress.</p>
       </div>
 
-      <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
-        <div class="w-14 h-14 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center text-2xl mb-4">✔️</div>
-        <h3 class="font-semibold mb-2 text-lg">Register Easily</h3>
-        <p class="text-sm text-slate-600">Simple registration with flexible payment options.</p>
+      <div class="p-8 bg-white rounded-2xl shadow hover:shadow-lg transition">
+        <div class="w-14 h-14 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-2xl mb-4">🎯</div>
+        <h3 class="font-semibold text-lg mb-2">Easy Registration</h3>
+        <p class="text-slate-600">Join in minutes with a clean and simple process.</p>
       </div>
 
-      <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
-        <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-4">🏆</div>
-        <h3 class="font-semibold mb-2 text-lg">Master German</h3>
-        <p class="text-sm text-slate-600">Practice regularly and prepare for exams like Goethe/TELC.</p>
+      <div class="p-8 bg-white rounded-2xl shadow hover:shadow-lg transition">
+        <div class="w-14 h-14 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-2xl mb-4">🔥</div>
+        <h3 class="font-semibold text-lg mb-2">Learn Fast</h3>
+        <p class="text-slate-600">Live classes, exercises, and practice sessions to build fluency.</p>
       </div>
+
     </div>
+
   </div>
 </section>
 
-<!-- FEATURED COURSES (NO IMAGES) -->
-<section class="py-20 bg-slate-50">
-  <div class="max-w-6xl mx-auto px-4">
 
-    <div class="flex items-center justify-between mb-8">
-      <h2 class="text-2xl md:text-3xl font-bold">Popular Courses</h2>
-      <a href="{% url 'courses:courses' %}" class="text-indigo-600 hover:underline text-sm">View All Courses →</a>
+<!-- ================= POPULAR COURSES ================= -->
+<section class="py-20 bg-slate-50">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="flex items-center justify-between mb-10">
+      <h2 class="text-3xl font-bold">Popular Courses</h2>
+      <a href="{% url 'courses:courses' %}" class="text-indigo-600 hover:underline">View All</a>
     </div>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {% for course in latest_courses %}
-      <div class="bg-white rounded-xl shadow p-6 hover:shadow-md transition">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-        <div class="flex items-center justify-between">
-          <h3 class="font-semibold text-lg">{{ course.title }}</h3>
-          <span class="text-xs px-2 py-1 rounded-full bg-indigo-600 text-white">
+      {% for course in latest_courses %}
+      <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition flex flex-col">
+
+        <div class="flex justify-between">
+          <h3 class="text-lg font-semibold text-slate-900">{{ course.title }}</h3>
+          <span class="px-3 py-1 text-xs rounded-full bg-indigo-600 text-white">
             {{ course.get_level_display }}
           </span>
         </div>
 
-        <p class="text-sm text-slate-600 mt-3">
+        <p class="text-slate-600 mt-3 flex-grow">
           {{ course.description|truncatewords:18 }}
         </p>
 
-        <div class="mt-4 flex items-center justify-between text-sm text-slate-600">
+        <div class="mt-4 flex justify-between text-sm">
           <span>⏱ {{ course.duration_weeks }} weeks</span>
-          <span class="text-slate-800 font-semibold">₹{{ course.price }}</span>
+          <span class="font-semibold text-indigo-700">₹{{ course.price }}</span>
         </div>
 
         <div class="mt-5">
           {% if user.is_authenticated %}
             {% if enrolled_ids and course.id in enrolled_ids %}
-              <button class="w-full py-2 bg-gray-100 text-slate-500 rounded" disabled>
-                Enrolled
-              </button>
+              <button class="w-full py-2 bg-gray-100 text-gray-500 rounded" disabled>Enrolled</button>
             {% else %}
               <a href="{% url 'courses:select_course' course.id %}"
-                 class="block w-full text-center py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
+                 class="w-full py-2 block text-center bg-indigo-600 text-white rounded hover:bg-indigo-700">
                 Enroll Now
               </a>
             {% endif %}
           {% else %}
             <a href="{% url 'courses:register' %}"
-               class="block w-full text-center py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
+               class="w-full py-2 block text-center bg-indigo-600 text-white rounded hover:bg-indigo-700">
               Enroll Now
             </a>
           {% endif %}
         </div>
 
       </div>
-      {% empty %}
-        <p class="text-slate-600">No courses available.</p>
       {% endfor %}
+
     </div>
 
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<!-- TESTIMONIALS -->
-<section class="py-20">
-  <div class="max-w-6xl mx-auto px-4">
-    <h2 class="text-2xl md:text-3xl font-bold mb-6">What Our Students Say</h2>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <h2 class="text-3xl font-bold mb-8">What Learners Say</h2>
 
     {% if testimonials %}
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div id="testimonialTrack"
+           class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hidden pb-2">
 
-      {% for fb in testimonials %}
-      <div class="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+        {% for fb in testimonials %}
+          <div class="min-w-[320px] snap-start p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
 
-        <!-- Avatar -->
-        <div class="flex items-center gap-3 mb-3">
-          <div class="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center text-lg font-bold">
-            {{ fb.student.full_name|slice:":1"|upper }}
-          </div>
-          <div>
-            <div class="font-semibold">{{ fb.student.full_name }}</div>
-            <div class="text-sm text-slate-500">
-              {{ fb.student.email }}
+            <div class="flex items-center gap-3 mb-3">
+              <div class="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center text-lg font-bold">
+                {{ fb.student.full_name|slice:":1"|upper }}
+              </div>
+              <div>
+                <div class="font-semibold">{{ fb.student.full_name }}</div>
+                <div class="text-sm text-slate-500">{{ fb.student.email }}</div>
+              </div>
             </div>
+
+            <div class="text-yellow-500 mb-2">
+              {% for i in "12345"|slice:":fb.rating" %}★{% endfor %}
+            </div>
+
+            <p class="text-slate-600 text-sm">“{{ fb.message }}”</p>
+
           </div>
-        </div>
-
-        <!-- Rating -->
-        <div class="text-amber-500 text-lg mb-2">
-          {% for i in "12345"|slice:":fb.rating" %}
-            ★
-          {% endfor %}
-        </div>
-
-        <p class="text-sm text-slate-600">“{{ fb.message }}”</p>
+        {% endfor %}
 
       </div>
-      {% endfor %}
-    </div>
     {% else %}
-      <p class="text-slate-600">No testimonials yet.</p>
+      <p class="text-slate-500">No testimonials yet.</p>
     {% endif %}
+
   </div>
 </section>
 
+<script>
+const track = document.getElementById("testimonialTrack");
+let autoScroll;
 
-<!-- CTA -->
-<section class="py-16 bg-white">
-  <div class="max-w-4xl mx-auto px-4 text-center">
-    <h3 class="text-2xl font-semibold mb-2">Ready to Begin?</h3>
-    <p class="text-slate-600 mb-6">Join today and start your journey to German fluency.</p>
-    <a href="{% url 'courses:register' %}"
-       class="inline-block px-8 py-3 rounded bg-indigo-600 text-white hover:bg-indigo-700">
-      Register Now
-    </a>
-  </div>
+function startAutoScroll() {
+  autoScroll = setInterval(() => {
+    track.scrollBy({ left: 330, behavior: "smooth" });
+
+    const atEnd =
+      track.scrollLeft + track.clientWidth >= track.scrollWidth - 5;
+
+    if (atEnd) {
+      setTimeout(() => {
+        track.scrollTo({ left: 0, behavior: "smooth" });
+      }, 800);
+    }
+  }, 2500);
+}
+
+function stopAutoScroll() {
+  clearInterval(autoScroll);
+}
+
+startAutoScroll();
+
+track.addEventListener("mouseenter", stopAutoScroll);
+track.addEventListener("mouseleave", startAutoScroll);
+track.addEventListener("touchstart", stopAutoScroll);
+track.addEventListener("touchend", startAutoScroll);
+</script>
+
+
+<!-- ================= CALL TO ACTION ================= -->
+<section class="py-16 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-center">
+  <h3 class="text-3xl font-bold mb-3">Ready to begin your German journey?</h3>
+  <p class="text-slate-200 mb-6">Start learning today with certified teachers and structured training.</p>
+  <a href="{% url 'courses:register' %}"
+     class="px-10 py-3 bg-white text-indigo-700 rounded-full font-semibold hover:bg-slate-100 shadow-lg">
+    Register Now
+  </a>
 </section>
 
 {% endblock %}

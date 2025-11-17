@@ -308,3 +308,18 @@ def give_feedback(request):
         form = FeedbackForm()
 
     return render(request, 'courses/feedback_form.html', {'form': form})
+
+
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+
+    is_enrolled = False
+    if request.user.is_authenticated:
+        student = Student.objects.filter(user=request.user).first()
+        if student:
+            is_enrolled = Registration.objects.filter(student=student, course=course).exists()
+
+    return render(request, 'courses/course_detail.html', {
+        'course': course,
+        'is_enrolled': is_enrolled
+    })

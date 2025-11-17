@@ -1,137 +1,152 @@
 {% extends 'courses/base.html' %}
 {% load static %}
 
-{% block title %}My Profile · Fluss Deutsch{% endblock %}
+{% block title %}My Dashboard · Fluss Deutsch{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-4 py-12">
 
-  <!-- Header -->
-  <div class="flex items-center gap-6 mb-8">
-    <div class="h-24 w-24 rounded-full bg-slate-200 flex items-center justify-center text-3xl font-bold text-slate-700 shadow">
-      {% if student.full_name %}
-        {{ student.full_name|slice:":1"|upper }}
-      {% else %}
-        {{ user.username|slice:":1"|upper }}
-      {% endif %}
-    </div>
+<div class="max-w-7xl mx-auto px-4 py-10">
 
-    <div>
-      <h1 class="text-3xl font-bold">
-        {{ student.full_name|default:user.get_full_name|default:user.username }}
-      </h1>
-      <p class="text-sm text-slate-500 mt-1">{{ student.email|default:user.email }}</p>
-      <p class="text-sm text-slate-500 mt-1">{{ student.phone }}</p>
-    </div>
+  <!-- DASHBOARD WRAPPER -->
+  <div class="md:flex gap-6">
 
-    <div class="ml-auto">
-      <button id="openEditBtn" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 shadow">
-        ✏️ Edit Profile
-      </button>
-    </div>
-  </div>
+    <!-- SIDEBAR -->
+    <div class="w-full md:w-64 bg-white shadow-lg rounded-xl p-6 mb-6 md:mb-0">
 
-  <!-- MAIN GRID -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-    <!-- LEFT SIDEBAR -->
-    <div class="md:col-span-1">
-      <div class="bg-white rounded-xl shadow p-6">
-        <h2 class="text-lg font-semibold mb-3">Your Information</h2>
-
-        <p class="text-sm text-slate-600"><span class="font-medium">Name:</span> {{ student.full_name }}</p>
-        <p class="text-sm text-slate-600 mt-2"><span class="font-medium">Email:</span> {{ student.email }}</p>
-        <p class="text-sm text-slate-600 mt-2"><span class="font-medium">Phone:</span> {{ student.phone }}</p>
-
-        <div class="mt-6">
-          <a href="{% url 'courses:courses' %}" 
-             class="block text-center px-4 py-2 rounded-md border border-indigo-600 text-indigo-600 hover:bg-indigo-50">
-            Browse Courses
-          </a>
+      <!-- Avatar -->
+      <div class="flex flex-col items-center text-center">
+        <div class="w-20 h-20 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-3xl font-bold">
+          {% if student.full_name %}
+            {{ student.full_name|slice:":1"|upper }}
+          {% else %}
+            {{ user.username|slice:":1"|upper }}
+          {% endif %}
         </div>
+
+        <h2 class="mt-3 text-lg font-semibold text-slate-800">
+          {{ student.full_name }}
+        </h2>
+        <p class="text-sm text-slate-500">{{ student.email }}</p>
+      </div>
+
+      <!-- MENU -->
+      <div class="mt-8 space-y-2 text-sm">
+        <a class="block px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium shadow">
+          Dashboard
+        </a>
+
+        <a href="{% url 'courses:courses' %}" class="block px-4 py-2 rounded-lg hover:bg-gray-100">
+          Browse Courses
+        </a>
+
+        <a href="{% url 'courses:give_feedback' %}" class="block px-4 py-2 rounded-lg hover:bg-gray-100">
+          Give Feedback
+        </a>
+
+        <a href="{% url 'courses:logout' %}" class="block px-4 py-2 rounded-lg hover:bg-red-50 text-red-600">
+          Logout
+        </a>
       </div>
     </div>
 
-    <!-- RIGHT MAIN CONTENT -->
-    <div class="md:col-span-2">
-      <div class="bg-white rounded-xl shadow p-6">
+    <!-- MAIN CONTENT -->
+    <div class="flex-1">
 
-        <!-- HEADER + FEEDBACK BUTTON -->
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-semibold">My Enrolled Courses</h2>
-
-          <a href="{% url 'courses:give_feedback' %}"
-             class="px-3 py-1.5 text-sm rounded-md bg-indigo-600 text-white hover:bg-indigo-700 shadow">
-            ⭐ Give Feedback
-          </a>
+      <!-- HEADER -->
+      <div class="bg-white shadow rounded-xl p-6 mb-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-semibold text-slate-800">Your Profile</h2>
+          <button id="openEditBtn" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">
+            Edit Profile
+          </button>
         </div>
+
+        <!-- Info -->
+        <div class="mt-6 grid sm:grid-cols-2 gap-6">
+
+          <div>
+            <p class="text-xs text-slate-500">Full Name</p>
+            <p class="text-lg font-medium">{{ student.full_name }}</p>
+          </div>
+
+          <div>
+            <p class="text-xs text-slate-500">Email</p>
+            <p class="text-lg font-medium">{{ student.email }}</p>
+          </div>
+
+          <div>
+            <p class="text-xs text-slate-500">Phone</p>
+            <p class="text-lg font-medium">{{ student.phone }}</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ENROLLED COURSES -->
+      <div class="bg-white shadow rounded-xl p-6">
+        <h2 class="text-xl font-semibold mb-4 text-slate-800">Enrolled Courses</h2>
 
         {% if registrations %}
-          <ul class="space-y-4">
+          <div class="space-y-4">
+
             {% for reg in registrations %}
-              <li class="flex items-start justify-between gap-4 p-4 border rounded-lg">
-                <div>
-                  <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 rounded-md bg-slate-100 flex items-center justify-center text-sm font-semibold">
-                      {{ reg.course.get_level_display|slice:":2" }}
-                    </div>
-                    <div>
-                      <div class="font-semibold">{{ reg.course.title }}</div>
-                      <div class="text-sm text-slate-500">{{ reg.course.get_level_display }} · {{ reg.course.duration_weeks }} weeks</div>
-                    </div>
-                  </div>
-                </div>
+            <div class="border rounded-lg p-4 flex justify-between items-center">
+              <div>
+                <h3 class="font-semibold">{{ reg.course.title }}</h3>
+                <p class="text-sm text-slate-500">
+                  {{ reg.course.get_level_display }} · {{ reg.course.duration_weeks }} weeks
+                </p>
+              </div>
 
-                <div class="flex items-center gap-2">
-                  <span class="text-sm font-semibold text-slate-800">₹{{ reg.course.price }}</span>
-
-                  <form method="post" action="{% url 'courses:delete_course' reg.course.id %}" onsubmit="return confirm('Remove this course from your enrollments?');">
-                    {% csrf_token %}
-                    <button type="submit" class="text-red-600 px-3 py-1 rounded-md border border-red-100 hover:bg-red-50">
-                      <span class="hidden sm:inline">Remove</span>
-                      <span class="sm:hidden">🗑️</span>
-                    </button>
-                  </form>
-                </div>
-              </li>
+              <form method="post" action="{% url 'courses:delete_course' reg.course.id %}">
+                {% csrf_token %}
+                <button class="px-3 py-1 text-sm text-red-600 border border-red-200 rounded hover:bg-red-50">
+                  Remove
+                </button>
+              </form>
+            </div>
             {% endfor %}
-          </ul>
-        {% else %}
-          <div class="text-center py-8 text-slate-500">
-            <div class="mb-4 text-4xl">😕</div>
-            <p class="mb-4">You are not enrolled in any courses yet.</p>
-            <a href="{% url 'courses:courses' %}" class="inline-block px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Explore Courses</a>
+
           </div>
+        {% else %}
+          <p class="text-slate-500">You haven't enrolled in any courses yet.</p>
         {% endif %}
       </div>
+
     </div>
-
-  </div>
-
-  <div class="mt-8 text-center">
-    <p class="text-sm text-slate-500">Keep learning — new courses are added regularly.</p>
   </div>
 </div>
 
-<!-- EDIT MODAL (unchanged) -->
+<!-- EDIT MODAL -->
+<div id="editModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+    <h3 class="text-lg font-semibold mb-4">Edit Profile</h3>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div class="mt-4 flex justify-end gap-2">
+        <button id="cancelEdit" type="button" class="px-4 py-2 border rounded-lg">
+          Cancel
+        </button>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-  const openBtn = document.getElementById('openEditBtn');
   const modal = document.getElementById('editModal');
-  const closeBtn = document.getElementById('closeEditBtn');
-  const cancelBtn = document.getElementById('cancelEdit');
+  const openBtn = document.getElementById('openEditBtn');
+  const cancelEdit = document.getElementById('cancelEdit');
 
-  function openModal(){ modal.classList.remove('hidden'); modal.classList.add('flex'); }
-  function closeModal(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
-
-  openBtn?.addEventListener('click', openModal);
-  closeBtn?.addEventListener('click', closeModal);
-  cancelBtn?.addEventListener('click', closeModal);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
+  openBtn.onclick = () => modal.classList.remove('hidden');
+  cancelEdit.onclick = () => modal.classList.add('hidden');
 </script>
 {% endblock %}
