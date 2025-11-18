@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'replace-with-your-secret-key'
 DEBUG = True
 
-ALLOWED_HOSTS = ['german-school.onrender.com','127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
