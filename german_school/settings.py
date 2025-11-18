@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+import pymysql
+pymysql.install_as_MySQLdb()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,17 +52,17 @@ WSGI_APPLICATION = 'german_school.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'german_school_db',
-        'USER': 'german_user',
-        'PASSWORD': 'Abhi@24_9517',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-        },
+            'ssl': {'verify_server_cert': False}
+        }
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = []
 LANGUAGE_CODE = 'en-us'
