@@ -1,20 +1,12 @@
 import os
 from pathlib import Path
-import pymysql
-from dotenv import load_dotenv
-
-load_dotenv()
-pymysql.install_as_MySQLdb()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load secret key from Railway variables
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'replace-with-your-secret-key'
+DEBUG = True
 
-# Debug based on env variable
-DEBUG = os.environ.get("DEBUG") == "True"
-
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -43,37 +35,33 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [ BASE_DIR / 'courses' / 'templates' ],
         'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
+        'OPTIONS': { 'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ], },
     },
 ]
 
 WSGI_APPLICATION = 'german_school.wsgi.application'
 
-# 🔥 FINAL Railway MySQL configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT', '3306'),
+        'NAME': 'german_school_db',
+        'USER': 'german_user',
+        'PASSWORD': 'Abhi@24_9517',
+        'HOST': 'localhost',
+        'PORT': '3306',
         'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
         },
     }
 }
 
-
 AUTH_PASSWORD_VALIDATORS = []
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
@@ -81,5 +69,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'courses' / 'static' ]
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

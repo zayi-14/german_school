@@ -1,6 +1,0 @@
-[build]
-builder = "NIXPACKS"
-
-[deploy]
-startCommand = "gunicorn german_school.wsgi:application"
-releaseCommand = "python manage.py migrate"
